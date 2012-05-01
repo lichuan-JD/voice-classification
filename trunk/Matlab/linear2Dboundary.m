@@ -11,7 +11,7 @@ M2 = M1; % Number of samples from class 2
 %M1 = 20;
 %M2 = 20;
 figure, scatter(x1(1:M1), y1(1:M1), 'r'), hold on, scatter(x2(1:M2),y2(1:M2), 'g')
-title('Training set (Class 1 - red, Class 2 - green)');
+title('Class 1 - red, Class 2 - green');
 t(:,1) = [ones(M1,1) ; zeros(M2,1)];
 t(:,2) = [zeros(M1,1) ; ones(M2,1)];
 
