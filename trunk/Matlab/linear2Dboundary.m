@@ -60,13 +60,14 @@ scatter(x2(t_est(M1+1:end)==0), y2(t_est(M1+1:end)==0), 'kx')
 dwx = W(1,1)-W(1,2); dwy = W(2,1)-W(2,2); dwbias = W(3,1)-W(3,2);
 %xdecbound = linspace(5,20,30); % simply plotpoints, PCA
 xdecbound = linspace(-2,2,30); % simply plotpoints, MDA
+%xdecbound = linspace(-6,10,30); % simply plotpoints, MDA
 plot(xdecbound, -(dwx/dwy)*xdecbound - (dwbias/dwy), 'k') 
 xlabel('e1');
 ylabel('e2');
 title('Decision Boundary (Class 1 - red, Class 2 - green)');
 
 % Histograms for distance to mean center of class 1 and 2
-figure, hist(R1, 20);
-title('Class 1 - red');
-figure, hist(R2, 20);
-title('Class 2 - green');
+%figure, hist(R1, 20);
+%title('Class 1 - red');
+%figure, hist(R2, 20);
+%title('Class 2 - green');

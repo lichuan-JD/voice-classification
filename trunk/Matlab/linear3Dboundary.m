@@ -43,7 +43,7 @@ scatter3(x2(t_est(M1+1:end)==0), y2(t_est(M1+1:end)==0), z1(t_est(M1+1:end)==0),
 % decision boundary
 dwx = W(1,1)-W(1,2); dwy = W(2,1)-W(2,2); dwz = W(3,1)-W(3,2); dwbias = W(4,1)-W(4,2);
 %xdecbound = linspace(5,20,30); % simply plotpoints PCA coordinates
-xdecbound = linspace(-2,2,30); % simply plotpoints MDA coordinates
+xdecbound = linspace(-2,0.5,30); % simply plotpoints MDA coordinates
 plot3(xdecbound, -(dwx/dwz)*xdecbound - (dwbias/dwy), -(dwx/dwz)*xdecbound - (dwbias/dwz), 'k') 
 xlabel('e1');
 ylabel('e2');
