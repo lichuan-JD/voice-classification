@@ -11,7 +11,7 @@ z2 = class2(:, 3);
 M1 = size(x1, 1); % Number of samples from class 1
 M2 = M1; % Number of samples from class 2
 
-title('Training set (Class1 - red, Class2 - green)');
+title('Class1 - red, Class2 - green');
 t(:,1) = [ones(M1,1) ; zeros(M2,1)];
 t(:,2) = [zeros(M1,1) ; ones(M2,1)];
 
