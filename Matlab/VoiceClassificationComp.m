@@ -1,45 +1,28 @@
 clear;
 close all;
 
-%% Setup and select training voice 1 + 3
-% [stereo1, fs] = wavread('OpKim.wav'); % Recording voice 1
-% [stereo2, fs] = wavread('OpBjarke.wav'); % Recording voice 2
-% 
-% start1 = 27000; % P in voice 1
-% end1 = 32000;
-% start2 = 60000; % Silence part of voice 1
-% end2 = 65000;
-% start3 = 308000; % P in voice 2
-% end3 = 313000;
-
-
-%% Setup and select training voice 1 + 3 (Bjarke)
-
 UsePCA_MDAFeatureReduction = 1 % 0=PCA, 1=MDA
 UseLinear2D_3DBoundary = 1 % 0=2D, 1=3D
 UseSamples = 125000;
 
+%% Setup and select training voice
+
 % Use op as training set
-[Op1, fs] = wavread('OpKimC.wav'); % Recording voice 1
-[Op2, fs] = wavread('OpBjarkeC.wav'); % Recording voice 2
+[stereo1, fs] = wavread('OpKimC.wav'); % Recording voice 1
+[stereo2, fs] = wavread('OpBjarkeC.wav'); % Recording voice 2
 [Silence, fs] = wavread('Silence.wav');
  
-start2 = 1; % Silence part of voice 1
+% Silence part of voice
+start2 = 1; 
 end2 = start2+UseSamples-1;
 
 % Analysing Op - training set
-start1 = 1; % 2xOp in voice 1
+start1 = 1; % Op in voice 1
 end1 = start1+UseSamples-1;
-
-start3 = 1; % 2xOp in voice 2
+start3 = 1; % Op in voice 2
 end3 = start3+UseSamples-1;
 
-stereo1 = Op1;
-stereo2 = Op2;
-
-
 %% Setup of mel-cepstrum based on frequences
-channel = 1; % Left or right channel (1,2)
 
 if fs == 11025
     n = 660; % length of frame for 11025 Hz
@@ -47,8 +30,8 @@ if fs == 11025
 end;
 if fs == 44100
     n = 2640; % length of frame for 44100 Hz
-    %inc = 1320; % increment = hop size (in number of samples) (default n/2)
-    inc = 1000; % increment = hop size (in number of samples) (default n/2)
+    inc = 1320; % increment = hop size (in number of samples) (default n/2) Windows XP
+    %inc = 1000; % increment = hop size (in number of samples) (default n/2) Windows 7 
 end;
 
 %% PCA to find the 3 most dominating projected eigenvectors
@@ -107,20 +90,18 @@ end
 %% Test set pattern classification on voice sound ned
 
 % Use ned as test set
-[Ned1, fs] = wavread('NedKim.wav'); % Recording voice 1
-[Ned2, fs] = wavread('NedBjarke.wav'); % Recording voice 2
+[stereo1_test, fs] = wavread('NedKimC.wav'); % Recording voice 1
+[stereo2_test, fs] = wavread('NedBjarkeC.wav'); % Recording voice 2
 
 % Analysing Ned - test set
-start1_test = 75000; % Ned in voice 1
+start1_test = 1; % Ned in voice 1
 end1_test = start1_test+UseSamples-1;
-start3_test = 75000; % Ned in voice 2
+start3_test = 1; % Ned in voice 2
 end3_test = start3_test+UseSamples-1;
-stereo1_test = Ned1;
-stereo2_test = Ned2;
 
-yt = stereo1_test(start1_test:end1_test, channel); % Select only one channel of time samples (Voice 1)
+yt = stereo1_test(start1_test:end1_test); % Select only one channel of time samples (Voice 1)
 mfcc_dmfcc_yt = mfcc_func(yt,fs,n,inc); % Computes cepstrum MFCC features voice 1
-wt = stereo2_test(start3_test:end3_test, channel); % Select samples at other position in recording (Voice 2)
+wt = stereo2_test(start3_test:end3_test); % Select samples at other position in recording (Voice 2)
 mfcc_dmfcc_wt = mfcc_func(w,fs,n,inc);
 
 Ytnew = mfcc_dmfcc_yt*v1; % projecting onto the new basis
