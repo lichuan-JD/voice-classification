@@ -50,8 +50,8 @@ if fs == 11025
 end;
 if fs == 44100
     n = 2640; % length of frame for 44100 Hz
-    inc = 1320; % increment = hop size (in number of samples) (default n/2)
-    %inc = 1000; % increment = hop size (in number of samples) (default n/2)
+    %inc = 1320; % increment = hop size (in number of samples) (default n/2)
+    inc = 1000; % increment = hop size (in number of samples) (default n/2)
 end;
 
 %% PCA to find the 3 most dominating projected eigenvectors
