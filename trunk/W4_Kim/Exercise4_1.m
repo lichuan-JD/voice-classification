@@ -29,6 +29,7 @@ options(14) = 400;		% Number of training cycles.
 % Train using scaled conjugate gradients.
 [net, options] = netopt(net, options, x', t', 'scg');
 
-y_est = mlpfwd(net, x');
+[y_est, w] = mlpfwd(net, x');
 figure, 
 hold on, plot(y_est, 'b'), plot(s, 'r');
+figure, plot(w);
