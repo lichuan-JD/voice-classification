@@ -56,7 +56,11 @@ else
     if UseLinear2D_3D_ANN == 1
         subSet = [1 3 2];
     else
+    if UseLinear2D_3D_ANN == 3
+        subSet = [1 2 3 4];
+    else
         subSet = [1 2 3];
+    end
     end
     [v1] = MultipleDiscriminantAnalysis(mfcc_dmfcc_y, mfcc_dmfcc_z, mfcc_dmfcc_w, subSet);
 end
@@ -111,8 +115,8 @@ switch (UseLinear2D_3D_ANN)
         % 2D classification using Artificial Neural Networks
         [err_train, err_test] = ANN2D(Ynew, Ytnew, Wnew, Wtnew, Znew, 3);
     case 3
-        % 2D classification using Artificial Neural Networks
-        [err_train, err_test] = ANN3D(Ynew, Ytnew, Wnew, Wtnew, Znew);
+        % 3D classification using Artificial Neural Networks
+        [err_train, err_test] = ANN3D(Ynew, Ytnew, Wnew, Wtnew, Znew, size(subSet,2));
     otherwise
         % Invalid classification parameter specifier       
 end
