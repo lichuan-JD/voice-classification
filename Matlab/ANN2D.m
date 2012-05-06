@@ -31,8 +31,8 @@ end
 
 %% Set up network parameters.
 % Artificial Neural Networks
-outputfunc = 'logistic';  % output function
-%outputfunc = 'softmax';  % output function
+%outputfunc = 'logistic';  % output function
+outputfunc = 'softmax';  % output function
 nin = 2;                % Number of inputs.
 nout = outputs;         % Number of outputs.
 

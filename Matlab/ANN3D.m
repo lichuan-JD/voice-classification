@@ -1,4 +1,4 @@
-function [err_train, err_test] = ANN3D(Ynew, Ytnew, Wnew, Wtnew, Znew)
+function [err_train, err_test] = ANN3D(Ynew, Ytnew, Wnew, Wtnew, Znew, dimensions)
 
 N1 = size(Ynew,1);
 train_data = [Ynew ; Wnew ; Znew];
@@ -24,7 +24,7 @@ scatter3(x1, y1, z1, 'r'), hold on, scatter3(x2, y2, z2, 'g'), scatter3(x3, y3, 
 % Artificial Neural Networks
 outputfunc = 'logistic';  % output function
 %outputfunc = 'softmax';  % output function
-nin = 3;                % Number of inputs.
+nin = dimensions;                % Number of inputs.
 nout = 3;               % Number of outputs.
 
 % Parameters to vary
@@ -35,8 +35,6 @@ alpha = 0.25;			% Coefficient of weight-decay prior.
 options = zeros(1,18);
 options(1) = 1;			% This provides display of error values.
 opt = 50;		% Number of training cycles. 
-
-idx = 1;
 
 % Find best hiden units
 %start = 1;
@@ -49,8 +47,9 @@ idx = 1;
 %for opt = start:stop
 
 % Find best alpha
-start = 0.1;
-stop = 0.25;
+start = 0.01;
+stop = 0.05;
+idx = 1;
 for alpha = start:0.01:stop    
     options(14) = opt;
     % create network (object)
@@ -82,6 +81,7 @@ plot(x, err_test, 'r');
 title('train error(blue) vs. test error (red)');
 xlabel('alpha');
 
+% calculate test and training set errors
 y_est = mlpfwd(net, train_data);
 Ctrain = confmat(y_est, labels_t)
 err_train = 1-sum(diag(Ctrain))/sum(Ctrain(:)) % correct classification percentage
