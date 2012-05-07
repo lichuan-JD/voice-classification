@@ -2,7 +2,7 @@ function [pX] = normalDensity(d, x, mean, covar)
 % Computes the multivariate normal density functions as described 
 % in equation (38) page 33, Richard O. Duda, Pattern Classification
 
-pX = zeros(size(x,1));
+%pX = zeros(size(x,1));
 for r=1:size(x,1)
   z1 = (x(r,:) - mean);
   z2 = (z1 / covar) * z1';
