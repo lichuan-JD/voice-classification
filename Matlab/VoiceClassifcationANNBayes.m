@@ -2,7 +2,7 @@ clear;
 close all;
 
 UsePCA_MDAFeatureReduction = 1 % 0=PCA, 1=MDA
-UseClassificationMethod= 4 % 0=2D, 1=3D, 2 = ANN2D, 3 = ANN3D, 4 = Bayesian decision theory
+UseClassificationMethod = 4 % 0=2D, 1=3D, 2 = ANN2D, 3 = ANN3D, 4 = Bayesian decision theory
 UseSamples = 125000;
 
 %% Setup and select training voice
