@@ -36,7 +36,9 @@ y_est = Z*W;
 t_est = max_id - 1 ; % id is 1,2,3.. in matlab - not 0,1,2..
 
 % finding testing set error / confusion matrix
-confmat(t(:,2), t_est') % as expected, lower error on training set than test set..
+Ctest = confmat(t(:,2), t_est') % as expected, lower error on training set than test set..
+err_test = 1-sum(diag(Ctest))/sum(Ctest(:)) % correct classification percentage
+
 scatter3(x1(t_est(1:M1)==1), y1(t_est(1:M1)==1), z1(t_est(1:M1)==1), 'kh')
 scatter3(x2(t_est(M1+1:end)==0), y2(t_est(M1+1:end)==0), z1(t_est(M1+1:end)==0), 'kh')
 
