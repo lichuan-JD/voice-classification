@@ -2,7 +2,7 @@ clear;
 close all;
 
 UsePCA_MDAFeatureReduction = 1 % 0=PCA, 1=MDA
-UseClassificationMethod = 4 % 0=2D, 1=3D, 2 = ANN2D, 3 = ANN3D, 4 = Bayesian decision theory
+UseClassificationMethod = 2 % 0=2D, 1=3D, 2 = ANN2D, 3 = ANN3D, 4 = Bayesian decision theory
 UseSamples = 125000;
 
 %% Setup and select training voice
@@ -94,7 +94,7 @@ Ytnew = mfcc_dmfcc_yt*v1; % projecting on the same basis
 Wtnew = mfcc_dmfcc_wt*v1; % projection on the same basis..
 
 %% Plot projected features
-if (size(subSet,1) > 2)
+if (size(subSet,2) > 2)
     figure(1);
     scatter3(Ynew(:,1), Ynew(:,2), Ynew(:,3), 'r.'); 
     hold on;
