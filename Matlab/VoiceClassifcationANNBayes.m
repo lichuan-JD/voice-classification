@@ -3,19 +3,23 @@ close all;
 
 UsePCA_MDAFeatureReduction = 1 % 0=PCA, 1=MDA
 UseClassificationMethod = 3 % 0=2D, 1=3D, 2 = ANN2D, 3 = ANN3D, 4 = Bayesian decision theory
-UseSamples = 125000;
+UseTestSet = 3 % 0 = Op/Ned, 1 = Speech*_2, 2 = Speech*_A, 3 = Speech*_B
 
 %% Setup and select training voice
 
 % Use op as training set
-%[stereo1, fs] = wavread('OpKimC.wav'); % Recording voice 1
-%[stereo2, fs] = wavread('OpBjarkeC.wav'); % Recording voice 2
-%[Silence, fs] = wavread('Silence.wav');
+if UseTestSet == 0 
+ [stereo1, fs] = wavread('OpKimC.wav'); % Recording voice 1
+ [stereo2, fs] = wavread('OpBjarkeC.wav'); % Recording voice 2 
+ [Silence, fs] = wavread('Silence.wav');
+ UseSamples = 125000;
+else
+ [stereo1, fs] = wavread('Speech1_1.wav'); % Recording voice 1
+ [stereo2, fs] = wavread('Speech2_1.wav'); % Recording voice 2
+ [Silence, fs] = wavread('Silence2.wav');
+ UseSamples = 250000;
+end
 
-[stereo1, fs] = wavread('Speech1_1.wav'); % Recording voice 1
-[stereo2, fs] = wavread('Speech2_1.wav'); % Recording voice 2
-[Silence, fs] = wavread('Silence2.wav');
- 
 % Silence part of voice
 start2 = 1; 
 end2 = start2+UseSamples-1;
@@ -61,7 +65,7 @@ else
         subSet = [1 3 2];
     else
     if UseClassificationMethod == 3 % ANN 3D - select features
-        subSet = [1 2 3 4];
+        subSet = [1 2 3];
     else
     if UseClassificationMethod == 4 % Baysian decision theory
         subSet = [1 2];
@@ -79,11 +83,21 @@ Wnew = mfcc_dmfcc_w*v1; % projection on the same basis..
 
 %% Test set pattern classification on voice sound ned
 
-% Use ned as test set
-%[stereo1_test, fs] = wavread('NedKimC.wav'); % Recording voice 1
-%[stereo2_test, fs] = wavread('NedBjarkeC.wav'); % Recording voice 2
-[stereo1_test, fs] = wavread('Speech1_2.wav'); % Recording voice 1
-[stereo2_test, fs] = wavread('Speech2_2.wav'); % Recording voice 2
+% Select test set to be used
+switch (UseTestSet)
+    case 0
+        [stereo1_test, fs] = wavread('NedKimC.wav'); % Recording voice 1
+        [stereo2_test, fs] = wavread('NedBjarkeC.wav'); % Recording voice 2
+    case 1
+        [stereo1_test, fs] = wavread('Speech1_2.wav'); % Recording voice 1 (Same text as 1)
+        [stereo2_test, fs] = wavread('Speech2_2.wav'); % Recording voice 2
+    case 2
+        [stereo1_test, fs] = wavread('Speech1_A.wav'); % Recording voice 1 (Very different text)
+        [stereo2_test, fs] = wavread('Speech2_A.wav'); % Recording voice 2
+    case 3
+        [stereo1_test, fs] = wavread('Speech1_B.wav'); % Recording voice 1 (Similar text as 1)
+        [stereo2_test, fs] = wavread('Speech2_B.wav'); % Recording voice 2
+end
 
 % Analysing Ned - test set
 start1_test = 1; % Ned in voice 1
