@@ -2,15 +2,19 @@ clear;
 close all;
 
 UsePCA_MDAFeatureReduction = 1 % 0=PCA, 1=MDA
-UseClassificationMethod = 2 % 0=2D, 1=3D, 2 = ANN2D, 3 = ANN3D, 4 = Bayesian decision theory
+UseClassificationMethod = 3 % 0=2D, 1=3D, 2 = ANN2D, 3 = ANN3D, 4 = Bayesian decision theory
 UseSamples = 125000;
 
 %% Setup and select training voice
 
 % Use op as training set
-[stereo1, fs] = wavread('OpKimC.wav'); % Recording voice 1
-[stereo2, fs] = wavread('OpBjarkeC.wav'); % Recording voice 2
-[Silence, fs] = wavread('Silence.wav');
+%[stereo1, fs] = wavread('OpKimC.wav'); % Recording voice 1
+%[stereo2, fs] = wavread('OpBjarkeC.wav'); % Recording voice 2
+%[Silence, fs] = wavread('Silence.wav');
+
+[stereo1, fs] = wavread('Speech1_1.wav'); % Recording voice 1
+[stereo2, fs] = wavread('Speech2_1.wav'); % Recording voice 2
+[Silence, fs] = wavread('Silence2.wav');
  
 % Silence part of voice
 start2 = 1; 
@@ -46,7 +50,7 @@ mfcc_dmfcc_w = mfcc_func(w,fs,n,inc);
 features = size(mfcc_dmfcc_y,2)
 samples = size(mfcc_dmfcc_y,1)
 
-%% PCA or MDA eature reduction
+%% PCA or MDA feature reduction
 if UsePCA_MDAFeatureReduction == 0
     % PCA feature reduction
     subSet = [1 3 2];
@@ -76,8 +80,10 @@ Wnew = mfcc_dmfcc_w*v1; % projection on the same basis..
 %% Test set pattern classification on voice sound ned
 
 % Use ned as test set
-[stereo1_test, fs] = wavread('NedKimC.wav'); % Recording voice 1
-[stereo2_test, fs] = wavread('NedBjarkeC.wav'); % Recording voice 2
+%[stereo1_test, fs] = wavread('NedKimC.wav'); % Recording voice 1
+%[stereo2_test, fs] = wavread('NedBjarkeC.wav'); % Recording voice 2
+[stereo1_test, fs] = wavread('Speech1_2.wav'); % Recording voice 1
+[stereo2_test, fs] = wavread('Speech2_2.wav'); % Recording voice 2
 
 % Analysing Ned - test set
 start1_test = 1; % Ned in voice 1
