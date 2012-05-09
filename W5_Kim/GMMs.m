@@ -1,4 +1,5 @@
 
+close all
 clear
 %cd('H:\Kurser_undervisning\TINONS1\Uge5')
 load cluster_dataset
@@ -44,7 +45,8 @@ hold on, scatter(x, y, 'b')
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % step-by-step illustration of EM algorithm for GMMs
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-M = 500; % number of steps/iterations
+M = 6; % number of steps/iterations
+%M = 500; % number of steps/iterations
 mix = gmm(dim, ncentres, covartype); % new mixture
 %mix = gmminit(mix, data, opts); % initialize using Kmeans
 opts(14) = 1; % max number of iterations
