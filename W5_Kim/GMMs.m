@@ -1,6 +1,6 @@
 
 clear
-cd('H:\Kurser_undervisning\TINONS1\Uge5')
+%cd('H:\Kurser_undervisning\TINONS1\Uge5')
 load cluster_dataset
 data = [x y];
 
@@ -10,7 +10,7 @@ scatter(x, y)
 axis([xi xf yi yf])
 
 % Using netlab..
-cd('H:\Kurser_undervisning\TINONS1\Tools\netlab\netlab')
+%cd('H:\Kurser_undervisning\TINONS1\Tools\netlab\netlab')
 
 dim = 2; % dimensions
 ncentres = 7; % number of mixtures - try using e.g. 3, 5 and 7..
@@ -76,7 +76,8 @@ end
 clear
 
 %% MNIST handwritten digits data
-load('H:\Kurser_undervisning\TINONS1\DataSets\MNIST_HandwrittenDigits\mnist_all.mat')
+%load('H:\Kurser_undervisning\TINONS1\DataSets\MNIST_HandwrittenDigits\mnist_all.mat')
+load('mnist_all.mat')
 
 % show some data..
 for i=1:5,
