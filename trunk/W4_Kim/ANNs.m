@@ -1,11 +1,12 @@
 % Artificial Neural Networks
 
 clear
-load('H:\Kurser_undervisning\TINONS1\Uge4\classification_2D_trainset')
+%load('H:\Kurser_undervisning\TINONS1\Uge4\classification_2D_trainset')
+load('classification_2D_trainset')
 scatter(x1, y1, 'r'), hold on, scatter(x2,y2, 'b')
 
 % Using netlab..
-cd('H:\Kurser_undervisning\TINONS1\Tools\netlab\netlab')
+%cd('H:\Kurser_undervisning\TINONS1\Tools\netlab\netlab')
 % Set up network parameters.
 nin = 2;                % Number of inputs.
 nhidden = 10;			% Number of hidden units.
@@ -25,7 +26,8 @@ options(14) = 100;		% Number of training cycles.
 [net, options] = netopt(net, options, train_data, labels_t, 'scg');
 
 % Test on test set
-load('H:\Kurser_undervisning\TINONS1\Uge4\classification_2D_testset')
+%load('H:\Kurser_undervisning\TINONS1\Uge4\classification_2D_testset')
+load('classification_2D_testset')
 scatter(x1, y1, 200, 'r'), hold on, scatter(x2,y2, 200, 'b')
 y_est = mlpfwd(net, test_data);
 [max_val,max_id] = max(y_est'); % find max. values
@@ -46,14 +48,16 @@ figure(1), contour(xrange, yrange, ygrid, [0 0], 'k-')
 
 
 % calculate test and training set errors
-load('H:\Kurser_undervisning\TINONS1\Uge4\classification_2D_trainset')
+%load('H:\Kurser_undervisning\TINONS1\Uge4\classification_2D_trainset')
+load('classification_2D_trainset')
 y_est = mlpfwd(net, train_data);
 Ctrain = confmat(y_est, labels_t);
 err_train = 1-sum(diag(Ctrain))/sum(Ctrain(:)) % correct classification percentage
 
 
 % on large test set..
-load('H:\Kurser_undervisning\TINONS1\Uge4\large_classification_2D_testset')
+%load('H:\Kurser_undervisning\TINONS1\Uge4\large_classification_2D_testset')
+load('large_classification_2D_testset')
 y_est = mlpfwd(net, test_data);
 Ctest = confmat(y_est, labels_t)
 err_test = 1-sum(diag(Ctest))/sum(Ctest(:)) % correct classification percentage
