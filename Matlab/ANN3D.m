@@ -1,4 +1,4 @@
-function [err_train, err_test] = ANN3D(Ynew, Ytnew, Wnew, Wtnew, Znew, dimensions)
+function [Ctrain, Ctest] = ANN3D(Ynew, Ytnew, Wnew, Wtnew, Znew, dimensions)
 
 N1 = size(Ynew,1);
 train_data = [Ynew ; Wnew ; Znew];

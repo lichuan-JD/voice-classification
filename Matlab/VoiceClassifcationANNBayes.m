@@ -2,8 +2,8 @@ clear;
 close all;
 
 UsePCA_MDAFeatureReduction = 1 % 0=PCA, 1=MDA
-UseClassificationMethod = 3 % 0=2D, 1=3D, 2 = ANN2D, 3 = ANN3D, 4 = Bayesian decision theory
-UseTestSet = 3 % 0 = Op/Ned, 1 = Speech*_2, 2 = Speech*_A, 3 = Speech*_B
+UseClassificationMethod = 4 % 0=2D, 1=3D, 2 = ANN2D, 3 = ANN3D, 4 = Bayesian decision theory
+UseTestSet = 1 % 0 = Op/Ned, 1 = Speech*_2, 2 = Speech*_A, 3 = Speech*_B
 
 %% Setup and select training voice
 
@@ -61,19 +61,26 @@ if UsePCA_MDAFeatureReduction == 0
     [v1] = PrincipalComponentAnalysis(mfcc_dmfcc_y, subSet); % Sub set of principal components
 else
     % MDA feature reduction
-    if UseClassificationMethod == 1 % Linear 3D
-        subSet = [1 3 2];
-    else
-    if UseClassificationMethod == 3 % ANN 3D - select features
-        subSet = [1 2 3];
-    else
-    if UseClassificationMethod == 4 % Baysian decision theory
-        subSet = [1 2];
-    else
-        subSet = [1 2 3];        
+    switch UseClassificationMethod 
+        case 0 % Linear 2D
+            if UseTestSet == 0 
+                subSet = [1 2 3];        
+            else
+                subSet = [1 3 2];        
+            end
+        case 1 % Linear 3D
+            subSet = [1 3 2];
+        case 3 % ANN 3D - select features
+            subSet = [1 2 3];
+        case 4 % Baysian decision theory
+            if UseTestSet == 0 
+                subSet = [1 2];
+            else
+                subSet = [1 3];
+            end  
+        otherwise
+            subSet = [1 2 3];        
     end    
-    end
-    end
     [v1] = MultipleDiscriminantAnalysis(mfcc_dmfcc_y, mfcc_dmfcc_z, mfcc_dmfcc_w, subSet);
 end
 
@@ -131,18 +138,20 @@ end
 switch (UseClassificationMethod)
     case 0
         % 2D classification training set with 2 classes and 2 features
-        [t_est, W] = linear2Dboundary(Ynew, Wnew); % training
-        [tt_est, Wt] = linear2Dboundary(Ytnew, Wtnew); %test
+        %[t_est, W] = linear2Dboundary(Ynew, Wnew); % training
+        %[tt_est, Wt] = linear2Dboundary(Ytnew, Wtnew); %test
+        [Ctrain, Ctest, W] = linear2D(Ynew, Wnew, Ytnew, Wtnew); % training
     case 1
         % 3D classification training set with 2 classes and 3 features
-        [t_est, W] = linear3Dboundary(Ynew, Wnew); % training
-        [tt_est, Wt] = linear3Dboundary(Ytnew, Wtnew); %test
+        %[t_est, W] = linear3Dboundary(Ynew, Wnew); % training
+        %[tt_est, Wt] = linear3Dboundary(Ytnew, Wtnew); %test
+        [Ctrain, Ctest, W] = linear3D(Ynew, Wnew, Ytnew, Wtnew); % training
     case 2
         % 2D classification using Artificial Neural Networks
-        [err_train, err_test] = ANN2D(Ynew, Ytnew, Wnew, Wtnew, Znew, 3); % 2 or 3 features
+        [Ctrain, Ctest] = ANN2D(Ynew, Ytnew, Wnew, Wtnew, Znew, 3); % 2 or 3 features
     case 3
         % 3D classification using Artificial Neural Networks
-        [err_train, err_test] = ANN3D(Ynew, Ytnew, Wnew, Wtnew, Znew, size(subSet,2));
+        [Ctrain, Ctest] = ANN3D(Ynew, Ytnew, Wnew, Wtnew, Znew, size(subSet,2));
     case 4
         % Classification based on bayesian decision theory
         % Assuming a normal distribution of class features
