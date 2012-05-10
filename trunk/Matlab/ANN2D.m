@@ -1,4 +1,4 @@
-function [err_train, err_test] = ANN2D(Ynew, Ytnew, Wnew, Wtnew, Znew, outputs)
+function [Ctrain, Ctest] = ANN2D(Ynew, Ytnew, Wnew, Wtnew, Znew, outputs)
 
 % Create train and test data set for ANN 2D
 N1 = size(Ynew,1);
