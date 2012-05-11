@@ -71,7 +71,7 @@ else
         case 1 % Linear 3D
             subSet = [1 3 2];
         case 3 % ANN 3D - select features
-            subSet = [1 2 3];
+            subSet = [1 2 3 4];
         case 4 % Baysian decision theory
             if UseTestSet == 0 
                 subSet = [1 2];
