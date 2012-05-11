@@ -82,11 +82,11 @@ clear
 load('mnist_all.mat')
 
 % show some data..
-for i=1:5,
-    im = reshape(test0(i,:), 28, 28)';
-    figure(1), imshow(im),
-    pause
-end
+% for i=1:5,
+%     im = reshape(test0(i,:), 28, 28)';
+%     figure(1), imshow(im),
+%     pause
+% end
 
 % use 0's, 1's and 2's (random..)
 X = double([test0; test1; test2]);
@@ -111,6 +111,18 @@ opts(14) = 100; % max number of iterations
 
 mix = gmminit(mix, Xnew, opts); % initialize using Kmeans
 [mix, opts, errlog] = gmmem(mix, Xnew, opts);
+
+% draw contours..
+% inc=0.01;
+% xi=-3; xf=5; yi=-5; yf=6;
+% xrange = xi:inc:xf;
+% yrange = yi:inc:yf;
+% [X Y]=meshgrid(xrange, yrange);
+% ygrid = gmmprob(mix, [X(:) Y(:)]);
+% ygrid = reshape(ygrid,size(X));
+% figure, imagesc(ygrid(end:-1:1, :)), colorbar
+% figure, contour(xrange, yrange, ygrid, 0:0.01:0.3,'k-')
+% hold on, scatter(x, y, 'b')
 
 % generate data (deterministic from the means..) - an advantage of
 % generative models..
