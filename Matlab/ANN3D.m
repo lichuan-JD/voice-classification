@@ -17,7 +17,7 @@ x3 = Znew(:,1);
 y3 = Znew(:,2);
 z3 = Znew(:,3);
 
-figure(2)
+figure,
 scatter3(x1, y1, z1, 'r'), hold on, scatter3(x2, y2, z2, 'g'), scatter3(x3, y3, z3,'b');
 
 %% Set up network parameters.
@@ -74,7 +74,7 @@ end;
 
 x = start:0.01:stop;
 %x = start:stop;
-figure(3), 
+figure, 
 hold on
 plot(x, err_train, 'b');
 plot(x, err_test, 'r');

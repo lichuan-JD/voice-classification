@@ -8,8 +8,8 @@ UseTestSet = 1 % 0 = Op/Ned, 1 = Speech*_2, 2 = Speech*_A, 3 = Speech*_B
 
 % Use op as training set
 if UseTestSet == 0 
- [stereo1, fs] = wavread('OpKimC.wav'); % Recording voice 1
- [stereo2, fs] = wavread('OpBjarkeC.wav'); % Recording voice 2 
+ [stereo1, fs] = wavread('OpBjarkeC.wav'); % Recording voice 2 
+ [stereo2, fs] = wavread('OpKimC.wav'); % Recording voice 1
  [Silence, fs] = wavread('Silence.wav');
  UseSamples = 125000;
 else
@@ -97,8 +97,8 @@ Wnew = mfcc_dmfcc_w*v1; % projection on the same basis..
 % Select test set to be used
 switch (UseTestSet)
     case 0
-        [stereo1_test, fs] = wavread('NedKimC.wav'); % Recording voice 1
-        [stereo2_test, fs] = wavread('NedBjarkeC.wav'); % Recording voice 2
+        [stereo1_test, fs] = wavread('NedBjarkeC.wav'); % Recording voice 2
+        [stereo2_test, fs] = wavread('NedKimC.wav'); % Recording voice 1
     case 1
         [stereo1_test, fs] = wavread('Speech1_2.wav'); % Recording voice 1 (Same text as 1)
         [stereo2_test, fs] = wavread('Speech2_2.wav'); % Recording voice 2
