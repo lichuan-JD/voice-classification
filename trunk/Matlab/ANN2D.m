@@ -23,7 +23,7 @@ y2 = Wnew(:,2);
 x3 = Znew(:,1);
 y3 = Znew(:,2);
 
-figure(2)
+figure,
 scatter(x1, y1, 'r'), hold on, scatter(x2, y2, 'g'), 
 if outputs == 3 % Number of output classes
     scatter(x3, y3, 'b');
@@ -82,7 +82,7 @@ end;
 
 x = start:0.01:stop;
 %x = start:stop;
-figure(3), 
+figure, 
 hold on
 plot(x, err_train, 'b');
 plot(x, err_test, 'r');
