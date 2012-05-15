@@ -67,7 +67,7 @@ axis([xi xf yi yf])
 
 dim = 2; % dimensions
 %ncentres = 2; % number of mixtures - try using e.g. 3, 5 and 7..
-ncentres = 7; % number of mixtures - try using e.g. 3, 5 and 7..
+ncentres = 12; % number of mixtures - try using e.g. 3, 5 and 7..
 covartype = 'diag'; % covariance-matrix type.. 'spherical', 'diag' or 'full'
 mix = gmm(dim, ncentres, covartype);
 

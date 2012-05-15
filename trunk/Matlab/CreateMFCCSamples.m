@@ -1,11 +1,11 @@
-function [mfcc_voice1, mfcc_voice2, mfcc_silence] = CreateMFCCSamples(PlotMFCC, Pause)
+function [mfcc_voice1, mfcc_voice2, mfcc_silence] = CreateMFCCSamples(PlotMFCC, Pause, Start, End)
 
 % Reads all sound recordings and create MFCC sample feature vectors
 mfcc_voice1 = [];
 mfcc_voice2 = [];
 mfcc_silence = [];
 
-for SamplesToLoad = 2:5
+for SamplesToLoad = Start:End 
     
     % Use op as training set
     switch (SamplesToLoad)
@@ -51,8 +51,8 @@ for SamplesToLoad = 2:5
     if fs == 44100
         %n = 2640; % length of frame for 44100 Hz 60 ms of voice
         %inc = 1320; % increment = hop size (in number of samples) (default n/2) Windows XP
-        n = 1323; % length of frame for 44100 Hz 30 ms of voice 
-        inc = 1320; % increment = hop size (in number of samples) (default n/2) Windows XP
+        n = 1320; % length of frame for 44100 Hz 30 ms of voice 
+        inc = 660; % increment = hop size (in number of samples) (default n/2) Windows XP
         %inc = 1000; % increment = hop size (in number of samples) (default n/2) Windows 7
     end;
     

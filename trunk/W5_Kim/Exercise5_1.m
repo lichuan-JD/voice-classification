@@ -56,6 +56,7 @@ px1 = probabilityDiagonal2DGaussian([2 0], mu1, [d1 d1])*pk1
 px2 = probabilityDiagonal2DGaussian([2 0], mu2, [d2 d2])*pk2
 px1 = probabilityDiagonal2DGaussian([6 0], mu1, [d1 d1])*pk1
 px2 = probabilityDiagonal2DGaussian([6 0], mu2, [d2 d2])*pk2
+scatter(6, 0, 'g')
 
 % GMM on artificial data set
 dim = 2; % dimensions
@@ -84,5 +85,5 @@ ygrid = gmmprob(mix, [X(:) Y(:)]);
 ygrid = reshape(ygrid,size(X));
 figure, imagesc(ygrid(end:-1:1, :)), colorbar
 figure, contour(xrange, yrange, ygrid, 0:0.01:0.3,'k-')
-hold on, scatter(x, y, 'b')
+hold on, scatter(px(:,1), px(:,2), 'b')
 

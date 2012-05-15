@@ -50,7 +50,8 @@ alpha = 0.25;			% Coefficient of weight-decay prior.
 
 % Set up vector of options for the optimiser.
 options = zeros(1,18);
-options(1) = 1;			% This provides display of error values.
+%options(1) = 1;			% This provides display of error values.
+options(1) = 0;			
 opt = 50;		% Number of training cycles. 
 
 % Find best hiden units
