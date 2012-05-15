@@ -45,9 +45,9 @@ pC2_x = bayesLogDiscriminator(tstC1, meanC2, sigmaC2, PC1);
 
 figure, 
 hold on
-plot(pC1_x, 'b');
-plot(pC2_x, 'r');
-title('Baysian Test if x belongs to C1(blue) or C2(red)');
+plot(pC1_x, 'r');
+plot(pC2_x, 'b');
+title('Baysian Test if V1 belongs to C1(red) or C2(blue)');
  
 %pC1_y = normalDensity(d, tstC2, meanC1, sigmaC1)*PC2;
 %pC2_y = normalDensity(d, tstC2, meanC2, sigmaC2)*PC2;
@@ -58,7 +58,7 @@ figure,
 hold on
 plot(pC1_y, 'r');
 plot(pC2_y, 'b');
-title('Baysian Test if y belongs to C1(red) or C2(blue)');
+title('Baysian Test if V2 belongs to C1(red) or C2(blue)');
 
 % Confusion matrix validation
 t = [zeros(tM1,1) ; ones(tM2,1)];

@@ -1,25 +1,41 @@
 clear;
 close all;
 
-UsePCA_MDAFeatureReduction = 0 % 0=PCA, 1=MDA
-% UseClassificationMethod : 0=2D, 1=3D, 2 = ANN2D, 3 = ANN3D, 4 = Bayesian decision theory
+UsePCA_MDAFeatureReduction = 1 % 0=PCA, 1=MDA
+% UseClassificationMethod : 0=2D, 1=3D, 2 = ANN2D, 3 = ANN3D, 
+%                           4 = Bayesian decision theory, 5 = GMM
 UseClassificationMethodStart = 0
 UseClassificationMethodEnd = 5
-UseSizeTrainSet = 100
-UseSizeTestSet = 600
+%UseSizeTrainSet = 188 % Op/Ned
+%UseSizeTestSet = 188
+UseSizeTrainSet = 188
+UseSizeTestSet = 188
+UseRandomisation = 1
 
-[mfcc_voice1 mfcc_voice2 mfcc_silence] = CreateMFCCSamples(0, 0);
+% Start, End
+% 0,1  Op/Ned
+% 2,3  Same speech
+% 2,5  All speech
+% 0,5  All
+[mfcc_voice1 mfcc_voice2 mfcc_silence] = CreateMFCCSamples(0, 0, 2, 2);
+%[mfcc_voice1 mfcc_voice2 mfcc_silence] = CreateMFCCSamples(1, 0, 2, 3);
 
 features = size(mfcc_voice1, 2)
 samples_total = size(mfcc_voice1, 1)
 
 data_rand = randperm(samples_total); %Randomize feature set training data
-train_rand = data_rand(1:UseSizeTrainSet);
-mfcc_v1 = mfcc_voice1(train_rand, :); 
+if UseRandomisation == 1
+    train_rand = data_rand(1:UseSizeTrainSet);
+    test_rand = data_rand(UseSizeTrainSet+1:(UseSizeTestSet+UseSizeTrainSet));
+else
+    train_rand = 1:UseSizeTrainSet;
+    test_rand = UseSizeTrainSet+1:(UseSizeTestSet+UseSizeTrainSet);
+end
+
+mfcc_v1 = mfcc_voice1(train_rand, :);
 mfcc_s = mfcc_silence(train_rand, :); 
 mfcc_v2 = mfcc_voice2(train_rand, :); 
 
-test_rand = data_rand(UseSizeTrainSet+1:(UseSizeTestSet+UseSizeTrainSet));
 mfcc_v1t = mfcc_voice1(test_rand, :);
 mfcc_st = mfcc_silence(test_rand, :); 
 mfcc_v2t = mfcc_voice2(test_rand, :); 
@@ -46,7 +62,7 @@ for UseClassificationMethod = UseClassificationMethodStart:UseClassificationMeth
             case 4 % Baysian decision theory
                 subSet = [1 2];
             otherwise
-                subSet = [1 2 3];
+                subSet = [1 2];
         end
         [v1] = MultipleDiscriminantAnalysis(mfcc_v1, mfcc_s, mfcc_v2, subSet);
     end
@@ -96,7 +112,7 @@ for UseClassificationMethod = UseClassificationMethodStart:UseClassificationMeth
             linear3D_test= 1-sum(diag(Ctest))/sum(Ctest(:)); % correct classification percentage
         case 2
             % 2D classification using Artificial Neural Networks
-            [Ctrain, Ctest] = ANN2D(V1new, V1tnew, V2new, V2tnew, Snew, Stnew, 2); % 2 or 3 features
+            [Ctrain, Ctest] = ANN2D(V1new, V1tnew, V2new, V2tnew, Snew, Stnew, 2); 
             ANN2D_train = 1-sum(diag(Ctrain))/sum(Ctrain(:)); % correct classification percentage
             ANN2D_test= 1-sum(diag(Ctest))/sum(Ctest(:)); % correct classification percentage
         case 3
@@ -110,6 +126,14 @@ for UseClassificationMethod = UseClassificationMethodStart:UseClassificationMeth
             [t_est, Ctest] = gausianDiscriminant(V1new, V1tnew, V2new, V2tnew); % 2 features only
             %gausianDiscriminant_train = 1-sum(diag(Ctrain))/sum(Ctrain(:)); % correct classification percentage
             gausianDiscriminant_test= 1-sum(diag(Ctest))/sum(Ctest(:)); % correct classification percentage
+        case 5
+            % 2D classification using the Expectation-Maximation (EM)
+            % algorithm for Gaussian Mixture Models in 2 dimensions
+            % A training is performed for each class V1, V2 and silence
+            % finding a gausian mixture for each model
+            [Ctrain, Ctest] = GMM2D(V1new, V1tnew, V2new, V2tnew, Snew, Stnew, 2); % 2 or 3 features
+            %GMM2D_train = 1-sum(diag(Ctrain))/sum(Ctrain(:)); % correct classification percentage
+            GNM2D_test= 1-sum(diag(Ctest))/sum(Ctest(:)); % correct classification percentage
         otherwise
             % Invalid classification parameter specifier
     end
@@ -117,17 +141,20 @@ for UseClassificationMethod = UseClassificationMethodStart:UseClassificationMeth
 end
 
 %% Printing final results
-linear2D_train
-linear2D_test
-
-linear3D_train
-linear3D_test
-
-ANN2D_train
-ANN2D_test
-
-ANN3D_train
-ANN3D_test
-
-%gausianDiscriminant_train
-gausianDiscriminant_test
+if UseClassificationMethodStart == 0 && UseClassificationMethodEnd == 5
+    ANN2D_train
+    ANN2D_test
+    
+    linear2D_train
+    linear2D_test
+    
+    linear3D_train
+    linear3D_test
+    
+    ANN3D_train
+    ANN3D_test
+    
+    %gausianDiscriminant_train
+    gausianDiscriminant_test
+    GNM2D_test
+end
