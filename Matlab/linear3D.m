@@ -62,32 +62,35 @@ xt2 = test2(:, 1); % Green
 yt2 = test2(:, 2);
 zt2 = test2(:, 3);
 
-M1 = size(xt1, 1); % Number of samples from class 1
-M2 = M1; % Number of samples from class 2
-Zt = [[xt1(1:M1);xt2(1:M2)] [yt1(1:M1);yt2(1:M2)] [zt1(1:M1);zt2(1:M2)] ones(M1+M2,1)];
+Mt1 = size(xt1, 1); % Number of samples from class 1
+Mt2 = Mt1; % Number of samples from class 2
+Zt = [[xt1(1:Mt1);xt2(1:Mt2)] [yt1(1:Mt1);yt2(1:Mt2)] [zt1(1:Mt1);zt2(1:Mt2)] ones(Mt1+Mt2,1)];
+
+tt(:,1) = [ones(Mt1,1) ; zeros(Mt2,1)];
+tt(:,2) = [zeros(Mt1,1) ; ones(Mt2,1)];
 
 yt_est = Zt*W; % Use same weights as for training
 
 [max_tval,max_tid] = max(yt_est'); % find max. values
 tt_est = max_tid - 1 ; % id is 1,2,3.. in matlab - not 0,1,2..
 % finding testing set error / confusion matrix
-Ctest = confmat(t(:,2), tt_est') % as expected, lower error on training set than test set..
+Ctest = confmat(tt(:,2), tt_est') % as expected, lower error on training set than test set..
 err_test = 1-sum(diag(Ctest))/sum(Ctest(:)) % correct classification percentage
 
 %% Plots classes in test feature space
 figure
-Ct1 = [xt1(1:M1) yt1(1:M1) zt1(1:M1)];
+Ct1 = [xt1(1:Mt1) yt1(1:Mt1) zt1(1:Mt1)];
 scatter3(Ct1(:,1)', Ct1(:,2)', Ct1(:,3)', 'r.');
 hold on;
 MCt1 = mean(Ct1); % Class1 mean
 scatter3(MCt1(1), MCt1(2), MCt1(3),'r');
-Ct2 = [xt2(1:M2) yt2(1:M2) zt2(1:M2)];
+Ct2 = [xt2(1:Mt2) yt2(1:Mt2) zt2(1:Mt2)];
 MCt2 = mean(Ct2); % Class2 mean
 scatter3(Ct2(:,1)', Ct2(:,2)', Ct2(:,3)','g.');
 scatter3(MCt2(1), MCt2(2), MCt2(3), 'g');
 
-scatter3(xt1(tt_est(1:M1)==1), yt1(tt_est(1:M1)==1), zt1(tt_est(1:M1)==1), 'kh')
-scatter3(xt2(tt_est(M1+1:end)==0), yt2(tt_est(M1+1:end)==0), zt1(tt_est(M1+1:end)==0), 'kh')
+scatter3(xt1(tt_est(1:Mt1)==1), yt1(tt_est(1:Mt1)==1), zt1(tt_est(1:Mt1)==1), 'kh')
+scatter3(xt2(tt_est(Mt1+1:end)==0), yt2(tt_est(Mt1+1:end)==0), zt1(tt_est(Mt1+1:end)==0), 'kh')
 
 % decision boundary
 dwx = W(1,1)-W(1,2); dwy = W(2,1)-W(2,2); dwz = W(3,1)-W(3,2); dwbias = W(4,1)-W(4,2);

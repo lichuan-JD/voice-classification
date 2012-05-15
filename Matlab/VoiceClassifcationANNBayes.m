@@ -148,10 +148,10 @@ switch (UseClassificationMethod)
         [Ctrain, Ctest, W] = linear3D(Ynew, Ytnew, Wnew, Wtnew); % training
     case 2
         % 2D classification using Artificial Neural Networks
-        [Ctrain, Ctest] = ANN2D(Ynew, Ytnew, Wnew, Wtnew, Znew, 3); % 2 or 3 features
+        [Ctrain, Ctest] = ANN2D(Ynew, Ytnew, Wnew, Wtnew, Znew, Znew, 3); % 2 or 3 features
     case 3
         % 3D classification using Artificial Neural Networks
-        [Ctrain, Ctest] = ANN3D(Ynew, Ytnew, Wnew, Wtnew, Znew, size(subSet,2));
+        [Ctrain, Ctest] = ANN3D(Ynew, Ytnew, Wnew, Wtnew, Znew, Znew, size(subSet,2));
     case 4
         % Classification based on bayesian decision theory
         % Assuming a normal distribution of class features
