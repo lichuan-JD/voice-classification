@@ -144,14 +144,14 @@ end
         % 2D classification training set with 2 classes and 2 features
         %[t_est, W] = linear2Dboundary(Ynew, Wnew); % training
         %[tt_est, Wt] = linear2Dboundary(Ytnew, Wtnew); %test
-        [Ctrain, Ctest, W] = linear2D(Ynew, Wnew, Ytnew, Wtnew); % training
+        [Ctrain, Ctest, W] = linear2D(Ynew, Ytnew, Wnew, Wtnew); % training
         linear2D_train = 1-sum(diag(Ctrain))/sum(Ctrain(:)); % correct classification percentage
         linear2D_test= 1-sum(diag(Ctest))/sum(Ctest(:)); % correct classification percentage
     case 1
         % 3D classification training set with 2 classes and 3 features
         %[t_est, W] = linear3Dboundary(Ynew, Wnew); % training
         %[tt_est, Wt] = linear3Dboundary(Ytnew, Wtnew); %test
-        [Ctrain, Ctest, W] = linear3D(Ynew, Wnew, Ytnew, Wtnew); % training
+        [Ctrain, Ctest, W] = linear3D(Ynew, Ytnew, Wnew, Wtnew); % training
         linear3D_train = 1-sum(diag(Ctrain))/sum(Ctrain(:)); % correct classification percentage
         linear3D_test= 1-sum(diag(Ctest))/sum(Ctest(:)); % correct classification percentage
     case 2

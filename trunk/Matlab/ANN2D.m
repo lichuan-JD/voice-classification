@@ -70,24 +70,18 @@ for alpha = start:0.01:stop
     % Test on training set
     y_est = mlpfwd(net, train_data);
     Ctrain = confmat(y_est, labels_t);
-    err_train(idx) = 1-sum(diag(Ctrain))/sum(Ctrain(:)) % correct classification percentage
+    err_trainv(idx) = 1-sum(diag(Ctrain))/sum(Ctrain(:)) % correct classification percentage
    
     % Test on test set
     y_est = mlpfwd(net, test_data);
     Ctest = confmat(y_est, labels_t);
-    err_test(idx) = 1-sum(diag(Ctest))/sum(Ctest(:)) % correct classification percentage
+    err_testv(idx) = 1-sum(diag(Ctest))/sum(Ctest(:)) % correct classification percentage
 
     idx = idx + 1;
 end;
 
 x = start:0.01:stop;
 %x = start:stop;
-figure, 
-hold on
-plot(x, err_train, 'b');
-plot(x, err_test, 'r');
-title('train error(blue) vs. test error (red)');
-xlabel('alpha');
 
 
 %% ANN.m reference 
@@ -96,13 +90,12 @@ y_est = mlpfwd(net, test_data);
 [max_val,max_id] = max(y_est'); % find max. values
 t_est = max_id - 1 ; % id is 1,2,3.. in matlab - not 0,1,2..
 if outputs == 2 % Number of output classes
-    figure(2)
     scatter(x1(t_est(1:N1)==1), y1(t_est(1:N1)==1), 200, 'gx')
     scatter(x2(t_est(N1+1:end)==0), y2(t_est(N1+1:end)==0), 200, 'rx')
 end
 
 % draw decision boundary
-xi=-4; xf=2; yi=-2; yf=4; 
+xi=-10; xf=15; yi=-8; yf=4; 
 inc=0.01;
 xrange = xi:inc:xf;
 yrange = yi:inc:yf;
@@ -110,7 +103,15 @@ yrange = yi:inc:yf;
 ygrid = mlpfwd(net, [X(:) Y(:)]);
 ygrid(:,1) = ygrid(:,1)-ygrid(:,2); % difference between output 1 and 2 - will be 0 at decision boundary
 ygrid = reshape(ygrid(:,1),size(X));
-figure(2), contour(xrange, yrange, ygrid, [0 0], 'k-')
+contour(xrange, yrange, ygrid, [0 0], 'k-')
+title('ANN2D countors');
+
+figure, 
+hold on
+plot(x, err_trainv, 'b');
+plot(x, err_testv, 'r');
+title('ANN2D train error(blue) vs. test error (red)');
+xlabel('alpha');
 
 % calculate test and training set errors
 y_est = mlpfwd(net, train_data);
@@ -121,5 +122,4 @@ err_train = 1-sum(diag(Ctrain))/sum(Ctrain(:)) % correct classification percenta
 y_est = mlpfwd(net, test_data);
 Ctest = confmat(y_est, labels_t)
 err_test = 1-sum(diag(Ctest))/sum(Ctest(:)) % correct classification percentage
-
 
