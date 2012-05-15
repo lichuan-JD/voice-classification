@@ -1,4 +1,4 @@
-function [mfcc_voice1, mfcc_voice2, mfcc_silence] = CreateMFCCSamples()
+function [mfcc_voice1, mfcc_voice2, mfcc_silence] = CreateMFCCSamples(PlotMFCC, Pause)
 
 % Reads all sound recordings and create MFCC sample feature vectors
 mfcc_voice1 = [];
@@ -69,5 +69,36 @@ for SamplesToLoad = 0:5
     mfcc_voice1 = [mfcc_voice1; mfcc_y]; % Add to feature vector
     mfcc_voice2 = [mfcc_voice2; mfcc_w];
     mfcc_silence = [mfcc_silence; mfcc_z];
+    
+    if PlotMFCC > 0 
+        %% Plotting MFCC values
+        figure, plot(y);
+        title('Voice1');
+        createplots(mfcc_y, fs, n, inc);      
+        title('Voice1 MFCC');
+        if PlotMFCC > 1
+            plotmfcc(mfcc_y, fs, n, inc);
+        end
+        %
+        figure, plot(z);
+        title('Silence');
+        createplots(mfcc_z, fs, n, inc);
+        title('Silence MFCC');
+        if PlotMFCC > 1
+            plotmfcc(mfcc_z, fs, n, inc);
+        end
+        %
+        figure, plot(w);
+        title('Voice2');
+        createplots(mfcc_w, fs, n, inc);
+        title('Voice2 MFCC');
+        if PlotMFCC > 1
+            plotmfcc(mfcc_w, fs, n, inc);
+        end
+        %
+        if Pause == 1
+            pause;
+        end
+    end
 
 end

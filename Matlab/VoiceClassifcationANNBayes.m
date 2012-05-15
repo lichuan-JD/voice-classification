@@ -140,12 +140,12 @@ switch (UseClassificationMethod)
         % 2D classification training set with 2 classes and 2 features
         %[t_est, W] = linear2Dboundary(Ynew, Wnew); % training
         %[tt_est, Wt] = linear2Dboundary(Ytnew, Wtnew); %test
-        [Ctrain, Ctest, W] = linear2D(Ynew, Wnew, Ytnew, Wtnew); % training
+        [Ctrain, Ctest, W] = linear2D(Ynew, Ytnew, Wnew, Wtnew); % training
     case 1
         % 3D classification training set with 2 classes and 3 features
         %[t_est, W] = linear3Dboundary(Ynew, Wnew); % training
         %[tt_est, Wt] = linear3Dboundary(Ytnew, Wtnew); %test
-        [Ctrain, Ctest, W] = linear3D(Ynew, Wnew, Ytnew, Wtnew); % training
+        [Ctrain, Ctest, W] = linear3D(Ynew, Ytnew, Wnew, Wtnew); % training
     case 2
         % 2D classification using Artificial Neural Networks
         [Ctrain, Ctest] = ANN2D(Ynew, Ytnew, Wnew, Wtnew, Znew, 3); % 2 or 3 features

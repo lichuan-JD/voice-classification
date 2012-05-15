@@ -1,4 +1,4 @@
-function [Ctrain, Ctest, W] = linear2D(train1, train2, test1, test2)
+function [Ctrain, Ctest, W] = linear2D(train1, test1, train2, test2)
 
 x1 = train1(:, 1); % Red
 y1 = train1(:, 2);
@@ -67,7 +67,7 @@ xdecbound = linspace(xmin,xmax,30);
 plot(xdecbound, -(dwx/dwy)*xdecbound - (dwbias/dwy), 'k') 
 xlabel('e1');
 ylabel('e2');
-title('Training linear boundary (Class 1 - red, Class 2 - green)');
+title('Training linear2D (Class 1 - red, Class 2 - green)');
 
 % Histograms for distance to mean center of class 1 and 2
 %figure, hist(R1, 20);
@@ -105,6 +105,6 @@ xdecbound = linspace(xmin,xmax,30);
 plot(xdecbound, -(dwx/dwy)*xdecbound - (dwbias/dwy), 'k');
 xlabel('e1');
 ylabel('e2');
-title('Test linear boundary (Class 1 - red, Class 2 - green)');
+title('Test linear2D (Class 1 - red, Class 2 - green)');
 
 

@@ -19,6 +19,7 @@ z3 = Znew(:,3);
 
 figure,
 scatter3(x1, y1, z1, 'r'), hold on, scatter3(x2, y2, z2, 'g'), scatter3(x3, y3, z3,'b');
+title('ANN3D');
 
 %% Set up network parameters.
 % Artificial Neural Networks
@@ -48,7 +49,7 @@ opt = 50;		% Number of training cycles.
 
 % Find best alpha
 start = 0.01;
-stop = 0.05;
+stop = 0.3;
 idx = 1;
 for alpha = start:0.01:stop    
     options(14) = opt;
@@ -78,7 +79,7 @@ figure,
 hold on
 plot(x, err_train, 'b');
 plot(x, err_test, 'r');
-title('train error(blue) vs. test error (red)');
+title('ANN3D train error(blue) vs. test error (red)');
 xlabel('alpha');
 
 % calculate test and training set errors

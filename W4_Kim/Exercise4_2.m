@@ -44,7 +44,7 @@ idx = 1;
 
 % Find best alpha
 start = 0.01;
-stop = 0.5;
+stop = 2.0;
 for alpha = start:0.01:stop    
     options(14) = opt;
     load('classification_2D_trainset')

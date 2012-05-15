@@ -7,7 +7,7 @@ tC1 = Ynew;
 tC2 = Wnew;
 
 figure, scatter(tC1(:,1), tC1(:,2), 'r'), hold on, scatter(tC2(:,1),tC2(:,2), 'g')
-title('Training set');
+title('Baysian Training set');
 
 % 1. + 2. + 3. Compute mean and covariance used in normal distribution
 meanC1 = mean(tC1)
@@ -30,7 +30,7 @@ tstC1 = Ytnew;
 tstC2 = Wtnew;
 
 figure, scatter(tstC1(:,1), tstC1(:,2), 'r'), hold on, scatter(tstC2(:,1),tstC2(:,2), 'g')
-title('Test set');
+title('Baysian Test set');
 
 % 4. Posterior class probabilities P(C | x) using Bayes’ theorem
 % Prior probabiliies
@@ -47,7 +47,7 @@ figure,
 hold on
 plot(pC1_x, 'b');
 plot(pC2_x, 'r');
-title('Test if x belongs to C1(blue) or C2(red)');
+title('Baysian Test if x belongs to C1(blue) or C2(red)');
  
 %pC1_y = normalDensity(d, tstC2, meanC1, sigmaC1)*PC2;
 %pC2_y = normalDensity(d, tstC2, meanC2, sigmaC2)*PC2;
@@ -58,7 +58,7 @@ figure,
 hold on
 plot(pC1_y, 'r');
 plot(pC2_y, 'b');
-title('Test if y belongs to C1(red) or C2(blue)');
+title('Baysian Test if y belongs to C1(red) or C2(blue)');
 
 % Confusion matrix validation
 t = [zeros(tM1,1) ; ones(tM2,1)];

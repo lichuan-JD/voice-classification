@@ -1,28 +1,31 @@
 clear;
 close all;
 
-UsePCA_MDAFeatureReduction = 1 % 0=PCA, 1=MDA
-UseClassificationMethodEnd = 4
-UseSizeTrainSet = 100
+UsePCA_MDAFeatureReduction = 0 % 0=PCA, 1=MDA
+% UseClassificationMethod : 0=2D, 1=3D, 2 = ANN2D, 3 = ANN3D, 4 = Bayesian decision theory
+UseClassificationMethodStart = 0
+UseClassificationMethodEnd = 5
+UseSizeTrainSet = 200
 UseSizeTestSet = UseSizeTrainSet
 
-[mfcc_voice1 mfcc_voice2 mfcc_silence] = CreateMFCCSamples();
+[mfcc_voice1 mfcc_voice2 mfcc_silence] = CreateMFCCSamples(0, 0);
 
 features = size(mfcc_voice1, 2)
 samples_total = size(mfcc_voice1, 1)
 
-train_rand = randperm(UseSizeTrainSet); %Randomize feature set training data
+data_rand = randperm(samples_total); %Randomize feature set training data
+train_rand = data_rand(1:UseSizeTrainSet);
 mfcc_v1 = mfcc_voice1(train_rand, :); 
 mfcc_s = mfcc_silence(train_rand, :); 
 mfcc_v2 = mfcc_voice2(train_rand, :); 
 
-test_rand = randperm(UseSizeTestSet); %Randomize feature set test data
+test_rand = data_rand(UseSizeTrainSet+1:(UseSizeTestSet+UseSizeTrainSet));
 mfcc_v1t = mfcc_voice1(test_rand, :);
 mfcc_v2t = mfcc_voice2(test_rand, :); 
 
 %% Loop all methods
-% UseClassificationMethod : 0=2D, 1=3D, 2 = ANN2D, 3 = ANN3D, 4 = Bayesian decision theory
-for UseClassificationMethod = 0:UseClassificationMethodEnd
+firstLoop = 1;
+for UseClassificationMethod = UseClassificationMethodStart:UseClassificationMethodEnd
 
     %% PCA or MDA feature reduction
     if UsePCA_MDAFeatureReduction == 0
@@ -55,16 +58,25 @@ for UseClassificationMethod = 0:UseClassificationMethodEnd
     V2tnew = mfcc_v2t*v1; % projection on the same basis..
     
     %% Plot projected features
-    if (size(subSet,2) > 2)
-        figure(1);
+    if (size(subSet,2) > 2) && firstLoop == 1
+        figure;
         scatter3(V1new(:,1), V1new(:,2), V1new(:,3), 'r.');
         hold on;
         scatter3(Snew(:,1), Snew(:,2), Snew(:,3), 'b.');
         scatter3(V2new(:,1), V2new(:,2), V2new(:,3), 'g.');
-        title('Projection of MFCC (Voice1 - red, Silence - blue, Voice2 - green)');
+        title('Projection training data (Voice1 - red, Silence - blue, Voice2 - green)');
         xlabel('e1');
         ylabel('e2');
         zlabel('e3');
+        figure;
+        scatter3(V1tnew(:,1), V1tnew(:,2), V1tnew(:,3), 'r.');
+        hold on;
+        scatter3(V2tnew(:,1), V2tnew(:,2), V2tnew(:,3), 'g.');
+        title('Projection test data (Voice1 - red, Silence - blue, Voice2 - green)');
+        xlabel('e1');
+        ylabel('e2');
+        zlabel('e3');
+        firstLoop = 0;
     end
     
     %% Classification of test set with 2 classes and 2 or 3 features
@@ -72,12 +84,12 @@ for UseClassificationMethod = 0:UseClassificationMethodEnd
     switch (UseClassificationMethod)
         case 0
             % 2D classification training set with 2 classes and 2 features
-            [Ctrain, Ctest, W] = linear2D(V1new, V2new, V1tnew, V2tnew); % training
+            [Ctrain, Ctest, W] = linear2D(V1new, V1tnew, V2new, V2tnew); % training
             linear2D_train = 1-sum(diag(Ctrain))/sum(Ctrain(:)); % correct classification percentage
             linear2D_test= 1-sum(diag(Ctest))/sum(Ctest(:)); % correct classification percentage
         case 1
             % 3D classification training set with 2 classes and 3 features
-            [Ctrain, Ctest, W] = linear3D(V1new, V2new, V1tnew, V2tnew); % training
+            [Ctrain, Ctest, W] = linear3D(V1new, V1tnew, V2new, V2tnew); % training
             linear3D_train = 1-sum(diag(Ctrain))/sum(Ctrain(:)); % correct classification percentage
             linear3D_test= 1-sum(diag(Ctest))/sum(Ctest(:)); % correct classification percentage
         case 2

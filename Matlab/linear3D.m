@@ -1,4 +1,4 @@
-function [Ctrain, Ctest, W] = linear3D(train1, train2, test1, test2)
+function [Ctrain, Ctest, W] = linear3D(train1, test1, train2, test2)
 
 x1 = train1(:, 1); % Red
 y1 = train1(:, 2);
@@ -51,7 +51,7 @@ plot3(xdecbound, -(dwx/dwz)*xdecbound - (dwbias/dwy), -(dwx/dwz)*xdecbound - (dw
 xlabel('e1');
 ylabel('e2');
 zlabel('e3');
-title('Training plan boundary(Class1 - red, Class2 - green)');
+title('Training linear3D (Class1 - red, Class2 - green)');
 
 %% Test against test classes
 xt1 = test1(:, 1); % Red
@@ -99,4 +99,4 @@ plot3(xdecbound, -(dwx/dwz)*xdecbound - (dwbias/dwy), -(dwx/dwz)*xdecbound - (dw
 xlabel('e1');
 ylabel('e2');
 zlabel('e3');
-title('Test plan boundary(Class1 - red, Class2 - green)');
+title('Test linear3D (Class1 - red, Class2 - green)');
