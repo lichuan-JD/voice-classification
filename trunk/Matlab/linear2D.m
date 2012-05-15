@@ -87,10 +87,13 @@ M2 = M1; % Number of samples from class 2
 Zt = [[xt1(1:M1);xt2(1:M2)] [yt1(1:M1);yt2(1:M2)] ones(M1+M2,1)];
 yt_est = Zt*W; % Use same weights as for training
 
+tt(:,1) = [ones(M1,1) ; zeros(M2,1)];
+tt(:,2) = [zeros(M1,1) ; ones(M2,1)];
+
 [max_tval,max_tid] = max(yt_est'); % find max. values
 tt_est = max_tid - 1 ; % id is 1,2,3.. in matlab - not 0,1,2..
 % finding testing set error / confusion matrix
-Ctest = confmat(t(:,2), tt_est') % as expected, lower error on training set than test set..
+Ctest = confmat(tt(:,2), tt_est') % as expected, lower error on training set than test set..
 err_test = 1-sum(diag(Ctest))/sum(Ctest(:)) % correct classification percentage
 
 % Draw test result

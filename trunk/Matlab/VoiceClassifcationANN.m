@@ -113,10 +113,10 @@ switch (UseLinear2D_3D_ANN)
         [tt_est, Wt] = linear3Dboundary(Ytnew, Wtnew); %test
     case 2
         % 2D classification using Artificial Neural Networks
-        [err_train, err_test] = ANN2D(Ynew, Ytnew, Wnew, Wtnew, Znew, 3);
+        [err_train, err_test] = ANN2D(Ynew, Ytnew, Wnew, Wtnew, Znew, Znew, 3);
     case 3
         % 3D classification using Artificial Neural Networks
-        [err_train, err_test] = ANN3D(Ynew, Ytnew, Wnew, Wtnew, Znew, size(subSet,2));
+        [err_train, err_test] = ANN3D(Ynew, Ytnew, Wnew, Wtnew, Znew, Znew, size(subSet,2));
     otherwise
         % Invalid classification parameter specifier       
 end

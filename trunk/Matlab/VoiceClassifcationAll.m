@@ -156,12 +156,12 @@ end
         linear3D_test= 1-sum(diag(Ctest))/sum(Ctest(:)); % correct classification percentage
     case 2
         % 2D classification using Artificial Neural Networks
-        [Ctrain, Ctest] = ANN2D(Ynew, Ytnew, Wnew, Wtnew, Znew, 3); % 2 or 3 features
+        [Ctrain, Ctest] = ANN2D(Ynew, Ytnew, Wnew, Wtnew, Znew, Znew, 3); % 2 or 3 features
         ANN2D_train = 1-sum(diag(Ctrain))/sum(Ctrain(:)); % correct classification percentage
         ANN2D_test= 1-sum(diag(Ctest))/sum(Ctest(:)); % correct classification percentage
     case 3
         % 3D classification using Artificial Neural Networks
-        [Ctrain, Ctest] = ANN3D(Ynew, Ytnew, Wnew, Wtnew, Znew, size(subSet,2));
+        [Ctrain, Ctest] = ANN3D(Ynew, Ytnew, Wnew, Wtnew, Znew, Znew, size(subSet,2));
         ANN3D_train = 1-sum(diag(Ctrain))/sum(Ctrain(:)); % correct classification percentage
         ANN3D_test= 1-sum(diag(Ctest))/sum(Ctest(:)); % correct classification percentage
     case 4

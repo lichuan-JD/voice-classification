@@ -1,11 +1,15 @@
-function [Ctrain, Ctest] = ANN3D(Ynew, Ytnew, Wnew, Wtnew, Znew, dimensions)
+function [Ctrain, Ctest] = ANN3D(Ynew, Ytnew, Wnew, Wtnew, Znew, Ztnew, dimensions)
 
 N1 = size(Ynew,1);
+Nt1 = size(Ytnew,1);
 train_data = [Ynew ; Wnew ; Znew];
-test_data = [Ytnew ; Wtnew ; Znew];
+test_data = [Ytnew ; Wtnew ; Ztnew];
 labels_t(:,1) = [ones(N1,1) ; zeros(N1,1) ; zeros(N1, 1)];
 labels_t(:,2) = [zeros(N1,1) ; ones(N1,1) ; zeros(N1, 1)];
 labels_t(:,3) = [zeros(N1,1) ; zeros(N1,1) ; ones(N1, 1)];
+labels_tt(:,1) = [ones(Nt1,1) ; zeros(Nt1,1) ; zeros(Nt1, 1)];
+labels_tt(:,2) = [zeros(Nt1,1) ; ones(Nt1,1) ; zeros(Nt1, 1)];
+labels_tt(:,3) = [zeros(Nt1,1) ; zeros(Nt1,1) ; ones(Nt1, 1)];
 
 x1 = Ynew(:,1);
 y1 = Ynew(:,2);
@@ -16,10 +20,22 @@ z2 = Wnew(:,3);
 x3 = Znew(:,1);
 y3 = Znew(:,2);
 z3 = Znew(:,3);
+xt1 = Ytnew(:,1);
+yt1 = Ytnew(:,2);
+zt1 = Ytnew(:,3);
+xt2 = Wtnew(:,1);
+yt2 = Wtnew(:,2);
+zt2 = Wtnew(:,3);
+xt3 = Ztnew(:,1);
+yt3 = Ztnew(:,2);
+zt3 = Ztnew(:,3);
 
 figure,
 scatter3(x1, y1, z1, 'r'), hold on, scatter3(x2, y2, z2, 'g'), scatter3(x3, y3, z3,'b');
-title('ANN3D');
+title('ANN3D train data');
+figure,
+scatter3(xt1, yt1, zt1, 'r'), hold on, scatter3(xt2, yt2, zt2, 'g'), scatter3(xt3, yt3, zt3,'b');
+title('ANN3D test data');
 
 %% Set up network parameters.
 % Artificial Neural Networks
@@ -67,7 +83,7 @@ for alpha = start:0.01:stop
     %load('classification_2D_testset')
     % 
     y_est = mlpfwd(net, test_data);
-    Ctest = confmat(y_est, labels_t);
+    Ctest = confmat(y_est, labels_tt);
     err_test(idx) = 1-sum(diag(Ctest))/sum(Ctest(:)) % correct classification percentage
 
     idx = idx + 1;
@@ -89,7 +105,7 @@ err_train = 1-sum(diag(Ctrain))/sum(Ctrain(:)) % correct classification percenta
 
 % on large test set..
 y_est = mlpfwd(net, test_data);
-Ctest = confmat(y_est, labels_t)
+Ctest = confmat(y_est, labels_tt)
 err_test = 1-sum(diag(Ctest))/sum(Ctest(:)) % correct classification percentage
 
 

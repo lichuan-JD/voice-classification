@@ -5,8 +5,8 @@ UsePCA_MDAFeatureReduction = 0 % 0=PCA, 1=MDA
 % UseClassificationMethod : 0=2D, 1=3D, 2 = ANN2D, 3 = ANN3D, 4 = Bayesian decision theory
 UseClassificationMethodStart = 0
 UseClassificationMethodEnd = 5
-UseSizeTrainSet = 200
-UseSizeTestSet = UseSizeTrainSet
+UseSizeTrainSet = 100
+UseSizeTestSet = 600
 
 [mfcc_voice1 mfcc_voice2 mfcc_silence] = CreateMFCCSamples(0, 0);
 
@@ -21,6 +21,7 @@ mfcc_v2 = mfcc_voice2(train_rand, :);
 
 test_rand = data_rand(UseSizeTrainSet+1:(UseSizeTestSet+UseSizeTrainSet));
 mfcc_v1t = mfcc_voice1(test_rand, :);
+mfcc_st = mfcc_silence(test_rand, :); 
 mfcc_v2t = mfcc_voice2(test_rand, :); 
 
 %% Loop all methods
@@ -56,6 +57,7 @@ for UseClassificationMethod = UseClassificationMethodStart:UseClassificationMeth
     
     V1tnew = mfcc_v1t*v1; % projecting on the same basis
     V2tnew = mfcc_v2t*v1; % projection on the same basis..
+    Stnew = mfcc_st*v1; % projection on the same basis..
     
     %% Plot projected features
     if (size(subSet,2) > 2) && firstLoop == 1
@@ -94,12 +96,12 @@ for UseClassificationMethod = UseClassificationMethodStart:UseClassificationMeth
             linear3D_test= 1-sum(diag(Ctest))/sum(Ctest(:)); % correct classification percentage
         case 2
             % 2D classification using Artificial Neural Networks
-            [Ctrain, Ctest] = ANN2D(V1new, V1tnew, V2new, V2tnew, Snew, 3); % 2 or 3 features
+            [Ctrain, Ctest] = ANN2D(V1new, V1tnew, V2new, V2tnew, Snew, Stnew, 2); % 2 or 3 features
             ANN2D_train = 1-sum(diag(Ctrain))/sum(Ctrain(:)); % correct classification percentage
             ANN2D_test= 1-sum(diag(Ctest))/sum(Ctest(:)); % correct classification percentage
         case 3
             % 3D classification using Artificial Neural Networks
-            [Ctrain, Ctest] = ANN3D(V1new, V1tnew, V2new, V2tnew, Snew, size(subSet,2));
+            [Ctrain, Ctest] = ANN3D(V1new, V1tnew, V2new, V2tnew, Snew, Stnew, size(subSet,2));
             ANN3D_train = 1-sum(diag(Ctrain))/sum(Ctrain(:)); % correct classification percentage
             ANN3D_test= 1-sum(diag(Ctest))/sum(Ctest(:)); % correct classification percentage
         case 4
