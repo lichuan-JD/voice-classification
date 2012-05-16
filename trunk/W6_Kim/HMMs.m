@@ -1,8 +1,5 @@
 
 clear 
-cd('H:\Kurser_undervisning\TINONS1\Tools\HMMtoolbox\HMMall\HMM')
-addpath('H:\Kurser_undervisning\TINONS1\Tools\HMMtoolbox\HMMall\KPMtools')
-addpath('H:\Kurser_undervisning\TINONS1\Tools\HMMtoolbox\HMMall\KPMstats')
 
 Nsamples = 50; % number of training sequences..
 
