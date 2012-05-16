@@ -45,7 +45,7 @@ nin = dimensions;                % Number of inputs.
 nout = 3;               % Number of outputs.
 
 % Parameters to vary
-nhidden = 5;			% Number of hidden units.
+nhidden = 8;			% Number of hidden units.
 alpha = 0.25;			% Coefficient of weight-decay prior. 
 
 % Set up vector of options for the optimiser.
@@ -53,22 +53,23 @@ options = zeros(1,18);
 %options(1) = 1;			% This provides display of error values.
 options(1) = 0;			
 opt = 50;		% Number of training cycles. 
+idx = 1;
 
 % Find best hiden units
 %start = 1;
 %stop = 30;
 %for nhidden = start:stop 
 
-% Find best training cycles
-%start = 10;
-%stop = 100;
-%for opt = start:stop
-
 % Find best alpha
-start = 0.01;
-stop = 0.3;
-idx = 1;
-for alpha = start:0.01:stop    
+%start = 0.001;
+%stop = 5;
+%for alpha = start:0.1:stop    
+
+% Find best training cycles
+start = 5;
+stop = 200;
+for opt = start:stop
+
     options(14) = opt;
     % create network (object)
     net = mlp(nin, nhidden, nout, outputfunc, alpha);
@@ -78,26 +79,27 @@ for alpha = start:0.01:stop
     % Test on training set
     y_est = mlpfwd(net, train_data);
     Ctrain = confmat(y_est, labels_t);
-    err_train(idx) = 1-sum(diag(Ctrain))/sum(Ctrain(:)) % correct classification percentage
+    err_train(idx) = 1-sum(diag(Ctrain))/sum(Ctrain(:)); % correct classification percentage
    
     % Test on test set
     %load('classification_2D_testset')
     % 
     y_est = mlpfwd(net, test_data);
     Ctest = confmat(y_est, labels_tt);
-    err_test(idx) = 1-sum(diag(Ctest))/sum(Ctest(:)) % correct classification percentage
+    err_test(idx) = 1-sum(diag(Ctest))/sum(Ctest(:)); % correct classification percentage
 
     idx = idx + 1;
 end;
 
-x = start:0.01:stop;
-%x = start:stop;
+%x = start:0.1:stop;
+x = start:stop;
 figure, 
 hold on
 plot(x, err_train, 'b');
 plot(x, err_test, 'r');
 title('ANN3D train error(blue) vs. test error (red)');
-xlabel('alpha');
+%xlabel('alpha');
+xlabel('training cycles');
 
 % calculate test and training set errors
 y_est = mlpfwd(net, train_data);

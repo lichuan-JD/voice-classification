@@ -2,6 +2,7 @@ function [voicebox_mfcc_dmfcc] = mfcc_func(WavIn, fs, n, inc)
 
 WavIn = sqrt(length(WavIn)) * WavIn / norm(WavIn); % WHITENING OF SOUND INPUT    
 WavIn = WavIn + eps;    % To avoid numerical probs
+%nc = 8; % no. of cepstral coeffs (apart from 0'th coef)
 nc = 12; % no. of cepstral coeffs (apart from 0'th coef)
 p = floor(3*log(fs)) ;
 voicebox_mfcc_dmfcc = melcepst(WavIn, fs, 'N',nc, p, n, inc); %'M0d'
