@@ -62,7 +62,7 @@ idx = 1;
 %for nhidden = start:stop 
 
 % Find best training cycles
-%start = 10;
+%start = 5;
 %stop = 100;
 %for opt = start:stop
 
@@ -79,12 +79,12 @@ for alpha = start:0.01:stop
     % Test on training set
     y_est = mlpfwd(net, train_data);
     Ctrain = confmat(y_est, labels_t);
-    err_trainv(idx) = 1-sum(diag(Ctrain))/sum(Ctrain(:)) % correct classification percentage
+    err_trainv(idx) = 1-sum(diag(Ctrain))/sum(Ctrain(:)); % correct classification percentage
    
     % Test on test set
     y_est = mlpfwd(net, test_data);
     Ctest = confmat(y_est, labels_tt);
-    err_testv(idx) = 1-sum(diag(Ctest))/sum(Ctest(:)) % correct classification percentage
+    err_testv(idx) = 1-sum(diag(Ctest))/sum(Ctest(:)); % correct classification percentage
 
     idx = idx + 1;
 end;

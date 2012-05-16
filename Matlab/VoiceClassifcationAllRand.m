@@ -1,7 +1,7 @@
 clear;
 close all;
 
-UsePCA_MDAFeatureReduction = 1 % 0=PCA, 1=MDA
+UsePCA_MDAFeatureReduction = 1 % 0=none, 1=PCA, 2=MDA
 % UseClassificationMethod : 0=2D, 1=3D, 2 = ANN2D, 3 = ANN3D, 
 %                           4 = Bayesian decision theory, 
 %                           5 = GMM2D, 6 = GMM3D 
@@ -15,11 +15,12 @@ UseRandomisation = 0
 
 % Start, End
 % 0,1  Op/Ned
-% 2,3  Same speech
+% 2,2  Same speech
+% 2,3  Same speech twice
 % 2,5  All speech
 % 0,5  All
-[mfcc_voice1 mfcc_voice2 mfcc_silence] = CreateMFCCSamples(1, 0, 2, 2);
 %[mfcc_voice1 mfcc_voice2 mfcc_silence] = CreateMFCCSamples(1, 0, 0, 1);
+[mfcc_voice1 mfcc_voice2 mfcc_silence] = CreateMFCCSamples(1, 0, 2, 2);
 %[mfcc_voice1 mfcc_voice2 mfcc_silence] = CreateMFCCSamples(1, 0, 2, 3);
 %[mfcc_voice1 mfcc_voice2 mfcc_silence] = CreateMFCCSamples(1, 0, 2, 5);
 %[mfcc_voice1 mfcc_voice2 mfcc_silence] = CreateMFCCSamples(1, 0, 0, 5);
@@ -49,7 +50,7 @@ firstLoop = 1;
 for UseClassificationMethod = UseClassificationMethodStart:UseClassificationMethodEnd
 
     %% PCA or MDA feature reduction
-    if UsePCA_MDAFeatureReduction == 0
+    if UsePCA_MDAFeatureReduction == 1
         % PCA feature reduction
         switch UseClassificationMethod
             case 1 % Linear 3D
@@ -60,12 +61,13 @@ for UseClassificationMethod = UseClassificationMethodStart:UseClassificationMeth
             case 5 % GMM 2D
                 subSet = [1 2];
             case 6 % GMM 3D
-                subSet = [1 2 3 4];
+                subSet = [1 2 3 4 5 6 7 8];
             otherwise
                 subSet = [1 2];
         end
         [v1] = PrincipalComponentAnalysis(mfcc_v1, subSet); % Sub set of principal components
     else
+    if UsePCA_MDAFeatureReduction == 2
         % MDA feature reduction
         switch UseClassificationMethod
             case 1 % Linear 3D
@@ -78,6 +80,11 @@ for UseClassificationMethod = UseClassificationMethodStart:UseClassificationMeth
                 subSet = [1 2];
         end
         [v1] = MultipleDiscriminantAnalysis(mfcc_v1, mfcc_s, mfcc_v2, subSet);
+    else
+        % None feature reduction
+        subSet = 1:features;
+        v1 = ones([features features]);
+    end
     end
     
     V1new = mfcc_v1*v1; % projecting onto the new basis
