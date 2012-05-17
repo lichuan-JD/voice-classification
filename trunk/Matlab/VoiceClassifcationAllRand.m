@@ -5,13 +5,13 @@ UsePCA_MDAFeatureReduction = 1 % 0=none, 1=PCA, 2=MDA
 % UseClassificationMethod : 0=2D, 1=3D, 2 = ANN2D, 3 = ANN3D, 
 %                           4 = Bayesian decision theory, 
 %                           5 = GMM2D, 6 = GMM3D 
-UseClassificationMethodStart = 0
-UseClassificationMethodEnd = 6
-%UseSizeTrainSet = 188 % Op/Ned
+UseClassificationMethodStart = 3
+UseClassificationMethodEnd = 3
+%UseSizeTrainSet = 188 % Op/Ned or same speech
 %UseSizeTestSet = 188
-UseSizeTrainSet = 188
-UseSizeTestSet = 188
-UseRandomisation = 0
+UseSizeTrainSet = 377 % same speech twice
+UseSizeTestSet = 377
+UseRandomisation = 1
 
 % Start, End
 % 0,1  Op/Ned
@@ -20,8 +20,8 @@ UseRandomisation = 0
 % 2,5  All speech
 % 0,5  All
 %[mfcc_voice1 mfcc_voice2 mfcc_silence] = CreateMFCCSamples(1, 0, 0, 1);
-[mfcc_voice1 mfcc_voice2 mfcc_silence] = CreateMFCCSamples(1, 0, 2, 2);
-%[mfcc_voice1 mfcc_voice2 mfcc_silence] = CreateMFCCSamples(1, 0, 2, 3);
+%[mfcc_voice1 mfcc_voice2 mfcc_silence] = CreateMFCCSamples(1, 0, 2, 2);
+[mfcc_voice1 mfcc_voice2 mfcc_silence] = CreateMFCCSamples(1, 0, 2, 3);
 %[mfcc_voice1 mfcc_voice2 mfcc_silence] = CreateMFCCSamples(1, 0, 2, 5);
 %[mfcc_voice1 mfcc_voice2 mfcc_silence] = CreateMFCCSamples(1, 0, 0, 5);
 
@@ -56,12 +56,12 @@ for UseClassificationMethod = UseClassificationMethodStart:UseClassificationMeth
             case 1 % Linear 3D
                 subSet = [1 2 3];
             case 3 % ANN 3D - select features
-                subSet = [1 2 3 4]; % Good
+                subSet = [1 2 3 4 5 6 7 8 9 10 11 12]; % Good
                 %subSet = [1 2 3 4 5]; Too many
             case 5 % GMM 2D
                 subSet = [1 2];
             case 6 % GMM 3D
-                subSet = [1 2 3 4 5 6 7 8];
+                subSet = [1 2 3 4 5 6];
             otherwise
                 subSet = [1 2];
         end
@@ -83,7 +83,7 @@ for UseClassificationMethod = UseClassificationMethodStart:UseClassificationMeth
     else
         % None feature reduction
         subSet = 1:features;
-        v1 = ones([features features]);
+        v1 = 1;
     end
     end
     
