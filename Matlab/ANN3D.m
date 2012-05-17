@@ -45,7 +45,7 @@ nin = dimensions;                % Number of inputs.
 nout = 3;               % Number of outputs.
 
 % Parameters to vary
-nhidden = 8;			% Number of hidden units.
+nhidden = 12;			% Number of hidden units.
 alpha = 0.25;			% Coefficient of weight-decay prior. 
 
 % Set up vector of options for the optimiser.
@@ -66,8 +66,8 @@ idx = 1;
 %for alpha = start:0.1:stop    
 
 % Find best training cycles
-start = 5;
-stop = 200;
+start = 80;
+stop = 90;
 for opt = start:stop
 
     options(14) = opt;
