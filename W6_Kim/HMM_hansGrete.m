@@ -7,42 +7,14 @@ addpath('C:\IHA\TINONS1\HMMall\KPMstats')
 % sound data - 23 utterances of "HANS" and "GRETE"...
 % (poor quality).. melcepst-feature vectors made from these..
 load('hans_grete_data.mat');
-soundsc(h{1}, fs)
-soundsc(g{1}, fs)
-
+%soundsc(h{1}, fs)
+%soundsc(g{1}, fs)
 
 N1 = 15; % number of training sequences..
 Ntest = 8;
 N_hiddenstates = 7; % number of hidden states
 Ndim = 8; % dimensions (of feature vector)
 Niter = 20; % max iteration of EM-algo.
-
-
-% train hmm on class 1 ("hans")
-% Train model on training data
-% initial guess of parameters - randomly
-prior0 = zeros(N_hiddenstates, 1); prior0(1) = 1; % start in state 1
-transmat0 = rand(N_hiddenstates,N_hiddenstates);
-% ensure left-right model - and has to pass through all states..
-for i=1:N_hiddenstates,  
-    for j=1:i-1,
-        transmat0(i, j) = 0;
-    end
-    for j=i+2:N_hiddenstates,
-        transmat0(i, j) = 0;
-    end
-end
-transmat0 = mk_stochastic(transmat0);
-sigma0 = repmat(eye(Ndim), [1 1 N_hiddenstates]); % covariance matrices
-idx = randperm(size(hfeat_train{1}, 2));
-for i=1:N_hiddenstates,
-    mu0(:,i) = hfeat_train{1}(:, idx(i)); % choosing mu's randomly from data set..
-end
-% training - hmm with gaussian outputs
-[LLh, prior1h, transmat1h, mu1h, sigma1h, mixmat1h] = ...
-    mhmm_em(hfeat_train, prior0, transmat0, mu0, sigma0, [], 'max_iter', Niter);
- 
-
 
 % train hmm on class 2 ("grete")
 % Train model on training data
@@ -68,19 +40,16 @@ end
 [LLg, prior1g, transmat1g, mu1g, sigma1g, mixmat1g] = ...
     mhmm_em(gfeat_train, prior0, transmat0, mu0, sigma0, [], 'max_iter', Niter);
  
-
-
 % check values
-transmat1g, transmat1h
+transmat1g 
 
 
-
-%% VITERBI PATHS - e.g. for general word-recognition..
+% VITERBI PATHS - e.g. for general word-recognition..
 for seq_id = 1:10,
     outputs = gfeat_train{seq_id};
     for t=1:size(outputs,2),
         for i=1:N_hiddenstates,
-            obslik(i, t) = gaussian_prob(outputs(:,t), mu1g(:,i), sigma1g(:,:,i));
+            obslik(i, t) = gaussian_prob(outputs(:,t), mu1g(:,i), sigma1g(:,:,i)); % Observed likelihood
         end
     end
     path = viterbi_path(prior1g, transmat1g, obslik);
@@ -89,6 +58,35 @@ for seq_id = 1:10,
     pause
 end
 
+%% train hmm on class 1 ("hans")
+% Train model on training data
+% initial guess of parameters - randomly
+prior0 = zeros(N_hiddenstates, 1); prior0(1) = 1; % start in state 1
+transmat0 = rand(N_hiddenstates,N_hiddenstates);
+% ensure left-right model - and has to pass through all states..
+for i=1:N_hiddenstates,  
+    for j=1:i-1,
+        transmat0(i, j) = 0;
+    end
+    for j=i+2:N_hiddenstates,
+        transmat0(i, j) = 0;
+    end
+end
+transmat0 = mk_stochastic(transmat0);
+sigma0 = repmat(eye(Ndim), [1 1 N_hiddenstates]); % covariance matrices
+idx = randperm(size(hfeat_train{1}, 2));
+for i=1:N_hiddenstates,
+    mu0(:,i) = hfeat_train{1}(:, idx(i)); % choosing mu's randomly from data set..
+end
+% training - hmm with gaussian outputs
+[LLh, prior1h, transmat1h, mu1h, sigma1h, mixmat1h] = ...
+    mhmm_em(gfeat_train, prior0, transmat0, mu0, sigma0, [], 'max_iter', Niter);
+
+transmat1h
+
+% training - hmm with gaussian outputs
+[LLh, prior1h, transmat1h, mu1h, sigma1h, mixmat1h] = ...
+    mhmm_em(hfeat_train, prior0, transmat0, mu0, sigma0, [], 'max_iter', Niter);
 for seq_id = 1:10,
     outputs = hfeat_train{seq_id};
     for t=1:size(outputs,2),
@@ -101,8 +99,6 @@ for seq_id = 1:10,
     subplot(212), plot(h{seq_id}), axis tight
     pause
 end
-
-
 
 
 
@@ -148,6 +144,7 @@ for seq_id = 1:Ntest,
     Class_label(seq_id+Ntest) = llh(seq_id+Ntest) > llg(seq_id+Ntest); % 1 for Hans, 0 for Grete..
 end
 
+figure,
 subplot(211), plot(llg, 'r'), hold on, plot(llh, 'b')
 subplot(212)
 stem(Class_label), axis([-1 2*Ntest+1 -1 2])
