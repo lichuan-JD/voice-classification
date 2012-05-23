@@ -1,17 +1,19 @@
 clear;
 close all;
 
-UsePCA_MDAFeatureReduction = 1 % 0=none, 1=PCA, 2=MDA
+UsePCA_MDAFeatureReduction = 2 % 0=none, 1=PCA, 2=MDA
 % UseClassificationMethod : 0=2D, 1=3D, 2 = ANN2D, 3 = ANN3D, 
 %                           4 = Bayesian decision theory, 
 %                           5 = GMM2D, 6 = GMM3D 
-UseClassificationMethodStart = 3
-UseClassificationMethodEnd = 3
+UseClassificationMethodStart = 4
+UseClassificationMethodEnd = 4
+UseSizeTrainSet = 94 % Op/Ned or same speech
+UseSizeTestSet = 94
 %UseSizeTrainSet = 188 % Op/Ned or same speech
 %UseSizeTestSet = 188
-UseSizeTrainSet = 377 % same speech twice
-UseSizeTestSet = 377
-UseRandomisation = 1
+%UseSizeTrainSet = 377 % same speech twice
+%UseSizeTestSet = 377
+UseRandomisation = 0
 
 % Start, End
 % 0,1  Op/Ned
@@ -19,9 +21,9 @@ UseRandomisation = 1
 % 2,3  Same speech twice
 % 2,5  All speech
 % 0,5  All
-%[mfcc_voice1 mfcc_voice2 mfcc_silence] = CreateMFCCSamples(1, 0, 0, 1);
-%[mfcc_voice1 mfcc_voice2 mfcc_silence] = CreateMFCCSamples(1, 0, 2, 2);
-[mfcc_voice1 mfcc_voice2 mfcc_silence] = CreateMFCCSamples(1, 0, 2, 3);
+[mfcc_voice1 mfcc_voice2 mfcc_silence] = CreateMFCCSamples(0, 0, 0, 0);
+%[mfcc_voice1 mfcc_voice2 mfcc_silence] = CreateMFCCSamples(0, 0, 2, 2);
+%[mfcc_voice1 mfcc_voice2 mfcc_silence] = CreateMFCCSamples(1, 0, 2, 3);
 %[mfcc_voice1 mfcc_voice2 mfcc_silence] = CreateMFCCSamples(1, 0, 2, 5);
 %[mfcc_voice1 mfcc_voice2 mfcc_silence] = CreateMFCCSamples(1, 0, 0, 5);
 
@@ -96,24 +98,42 @@ for UseClassificationMethod = UseClassificationMethodStart:UseClassificationMeth
     Stnew = mfcc_st*v1; % projection on the same basis..
     
     %% Plot projected features
-    if (size(subSet,2) > 2) && firstLoop == 1
-        figure;
-        scatter3(V1new(:,1), V1new(:,2), V1new(:,3), 'r.');
-        hold on;
-        scatter3(Snew(:,1), Snew(:,2), Snew(:,3), 'b.');
-        scatter3(V2new(:,1), V2new(:,2), V2new(:,3), 'g.');
-        title('Projection training data (Voice1 - red, Silence - blue, Voice2 - green)');
-        xlabel('e1');
-        ylabel('e2');
-        zlabel('e3');
-        figure;
-        scatter3(V1tnew(:,1), V1tnew(:,2), V1tnew(:,3), 'r.');
-        hold on;
-        scatter3(V2tnew(:,1), V2tnew(:,2), V2tnew(:,3), 'g.');
-        title('Projection test data (Voice1 - red, Silence - blue, Voice2 - green)');
-        xlabel('e1');
-        ylabel('e2');
-        zlabel('e3');
+    if firstLoop == 1 
+        if size(subSet,2) > 2 
+            figure;
+            scatter3(V1new(:,1), V1new(:,2), V1new(:,3), 'r.');
+            hold on;
+            scatter3(Snew(:,1), Snew(:,2), Snew(:,3), 'b.');
+            scatter3(V2new(:,1), V2new(:,2), V2new(:,3), 'g.');
+            title('Projection training data (Voice1 - red, Silence - blue, Voice2 - green)');
+            xlabel('e1');
+            ylabel('e2');
+            zlabel('e3');
+            figure;
+            scatter3(V1tnew(:,1), V1tnew(:,2), V1tnew(:,3), 'r.');
+            hold on;
+            scatter3(V2tnew(:,1), V2tnew(:,2), V2tnew(:,3), 'g.');
+            title('Projection test data (Voice1 - red, Silence - blue, Voice2 - green)');
+            xlabel('e1');
+            ylabel('e2');
+            zlabel('e3');
+        else % 2 dimensions
+            figure;
+            scatter(V1new(:,1), V1new(:,2), 'r.');
+            hold on;
+            scatter(Snew(:,1), Snew(:,2), 'b.');
+            scatter(V2new(:,1), V2new(:,2), 'g.');
+            title('Projection training data (Voice1 - red, Silence - blue, Voice2 - green)');
+            xlabel('e1');
+            ylabel('e2');
+            figure;
+            scatter(V1tnew(:,1), V1tnew(:,2), 'r.');
+            hold on;
+            scatter(V2tnew(:,1), V2tnew(:,2), 'g.');
+            title('Projection test data (Voice1 - red, Silence - blue, Voice2 - green)');
+            xlabel('e1');
+            ylabel('e2');
+        end
         firstLoop = 0;
     end
     
