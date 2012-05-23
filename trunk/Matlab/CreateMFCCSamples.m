@@ -17,6 +17,8 @@ for SamplesToLoad = Start:End
         case 1
             [stereo1, fs] = wavread('NedBjarkeC.wav'); % Recording voice 2
             [stereo2, fs] = wavread('NedKimC.wav'); % Recording voice 1
+            [Silence, fs] = wavread('Silence.wav');
+            UseSamples = 125000;
         case 2
             [stereo1, fs] = wavread('Speech1_1.wav'); % Recording voice 1
             [stereo2, fs] = wavread('Speech2_1.wav'); % Recording voice 2
@@ -25,12 +27,18 @@ for SamplesToLoad = Start:End
         case 3
             [stereo1, fs] = wavread('Speech1_2.wav'); % Recording voice 1 (Same text as 1)
             [stereo2, fs] = wavread('Speech2_2.wav'); % Recording voice 2
+            [Silence, fs] = wavread('Silence2.wav');
+            UseSamples = 250000;
         case 4
             [stereo1, fs] = wavread('Speech1_A.wav'); % Recording voice 1 (Very different text)
             [stereo2, fs] = wavread('Speech2_A.wav'); % Recording voice 2
+            [Silence, fs] = wavread('Silence2.wav');
+            UseSamples = 250000;
         case 5
             [stereo1, fs] = wavread('Speech1_B.wav'); % Recording voice 1 (Similar text as 1)
             [stereo2, fs] = wavread('Speech2_B.wav'); % Recording voice 2
+            [Silence, fs] = wavread('Silence2.wav');
+            UseSamples = 250000;
     end
     
     % Silence part of voice
