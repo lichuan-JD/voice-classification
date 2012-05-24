@@ -45,8 +45,8 @@ nin = 2;                % Number of inputs.
 nout = outputs;         % Number of outputs.
 
 % Parameters to vary
-nhidden = 5;			% Number of hidden units.
-alpha = 0.2;			% Coefficient of weight-decay prior. 
+nhidden = 12;			% Number of hidden units.
+alpha = 0.0001;			% Coefficient of weight-decay prior. 
 
 % Set up vector of options for the optimiser.
 options = zeros(1,18);
@@ -67,9 +67,13 @@ idx = 1;
 %for opt = start:stop
 
 % Find best alpha
-start = 0.1;
-stop = 0.2;
-for alpha = start:0.01:stop    
+%start = 0.1;
+%stop = 0.2;
+%for alpha = start:0.01:stop 
+
+start = 50;
+stop = 200;
+for opt = start:stop
     options(14) = opt;
     % create network (object)
     net = mlp(nin, nhidden, nout, outputfunc, alpha);
@@ -89,14 +93,14 @@ for alpha = start:0.01:stop
     idx = idx + 1;
 end;
 
-x = start:0.01:stop;
-%x = start:stop;
+%x = start:0.01:stop;
+x = start:stop;
 figure, 
 hold on
 plot(x, err_trainv, 'b');
 plot(x, err_testv, 'r');
 title('ANN2D train error(blue) vs. test error (red)');
-xlabel('alpha');
+xlabel('training iterations');
 
 % Plot training set
 figure,
@@ -113,7 +117,8 @@ if outputs == 2 % Number of output classes
 end
 
 % draw decision boundary
-xi=-10; xf=10; yi=-8; yf=8; 
+%xi=-10; xf=10; yi=-8; yf=8; 
+xi=-4; xf=2; yi=-3; yf=2; 
 inc=0.01;
 xrange = xi:inc:xf;
 yrange = yi:inc:yf;
@@ -140,7 +145,7 @@ if outputs == 2 % Number of output classes
 end
 
 % draw decision boundary
-xi=-10; xf=10; yi=-8; yf=8; 
+%xi=-10; xf=10; yi=-8; yf=8; 
 inc=0.01;
 xrange = xi:inc:xf;
 yrange = yi:inc:yf;

@@ -147,6 +147,7 @@ for UseClassificationMethod = UseClassificationMethodStart:UseClassificationMeth
             linear2D_test= 1-sum(diag(Ctest))/sum(Ctest(:)); % correct classification percentage
         case 1
             % 3D classification training set with 2 classes and 3 features
+            % or more
             [Ctrain, Ctest, W] = linear3D(V1new, V1tnew, V2new, V2tnew); % training
             linear3D_train = 1-sum(diag(Ctrain))/sum(Ctrain(:)); % correct classification percentage
             linear3D_test= 1-sum(diag(Ctest))/sum(Ctest(:)); % correct classification percentage
@@ -161,7 +162,7 @@ for UseClassificationMethod = UseClassificationMethodStart:UseClassificationMeth
             ANN3D_train = 1-sum(diag(Ctrain))/sum(Ctrain(:)); % correct classification percentage
             ANN3D_test= 1-sum(diag(Ctest))/sum(Ctest(:)); % correct classification percentage
         case 4
-            % Classification based on bayesian decision theory
+            % Classification based on Bayesian decision theory
             % Assuming a normal distribution of class features
             [t_est, Ctest] = gausianDiscriminant(V1new, V1tnew, V2new, V2tnew); % 2 features only
             %gausianDiscriminant_train = 1-sum(diag(Ctrain))/sum(Ctrain(:)); % correct classification percentage
@@ -170,15 +171,15 @@ for UseClassificationMethod = UseClassificationMethodStart:UseClassificationMeth
             % 2D classification using the Expectation-Maximation (EM)
             % algorithm for Gaussian Mixture Models in 2 dimensions
             % A training is performed for each class V1, V2 and silence
-            % finding a gausian mixture for each model
+            % finding a Gaussian mixture for each model
             [Ctrain, Ctest] = GMM2D(V1new, V1tnew, V2new, V2tnew, Snew, Stnew); 
             %GMM2D_train = 1-sum(diag(Ctrain))/sum(Ctrain(:)); % correct classification percentage
             GMM2D_test= 1-sum(diag(Ctest))/sum(Ctest(:)); % correct classification percentage
         case 6
-            % 2D classification using the Expectation-Maximation (EM)
-            % algorithm for Gaussian Mixture Models in 2 dimensions
+            % 3D classification using the Expectation-Maximation (EM)
+            % algorithm for Gaussian Mixture Models in 3 dimensions or more
             % A training is performed for each class V1, V2 and silence
-            % finding a gausian mixture for each model
+            % finding a Gaussian mixture for each model
             [Ctrain, Ctest] = GMM3D(V1new, V1tnew, V2new, V2tnew, Snew, Stnew, size(subSet,2)); % 3 or more features
             %GMM2D_train = 1-sum(diag(Ctrain))/sum(Ctrain(:)); % correct classification percentage
             GMM3D_test= 1-sum(diag(Ctest))/sum(Ctest(:)); % correct classification percentage
