@@ -60,6 +60,9 @@ subplot(212), stem(output_state)
 pause;
 %HMMs.m
 clear 
+addpath('C:\IHA\TINONS1\HMMall\HMM')
+addpath('C:\IHA\TINONS1\HMMall\KPMtools')
+addpath('C:\IHA\TINONS1\HMMall\KPMstats')
 
 Nsamples = 50; % number of training sequences..
 
