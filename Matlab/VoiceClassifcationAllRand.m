@@ -4,15 +4,17 @@ close all;
 UsePCA_MDAFeatureReduction = 2 % 0=none, 1=PCA, 2=MDA
 % UseClassificationMethod : 0=2D, 1=3D, 2 = ANN2D, 3 = ANN3D, 
 %                           4 = Bayesian decision theory, 
-%                           5 = GMM2D, 6 = GMM3D 
-UseClassificationMethodStart = 4
-UseClassificationMethodEnd = 4
-UseSizeTrainSet = 94 % Op/Ned or same speech
-UseSizeTestSet = 94
+%                           5 = GMM2D, 6 = GMM3D, 7 = GMM2DComp 
+UseClassificationMethodStart = 7
+UseClassificationMethodEnd = 7
+%UseSizeTrainSet = 94 % Op/Ned or same speech
+%UseSizeTestSet = 94
 %UseSizeTrainSet = 188 % Op/Ned or same speech
 %UseSizeTestSet = 188
 %UseSizeTrainSet = 377 % same speech twice
 %UseSizeTestSet = 377
+UseSizeTrainSet = 377 % same speech twice
+UseSizeTestSet = 377
 UseRandomisation = 0
 
 % Start, End
@@ -21,9 +23,9 @@ UseRandomisation = 0
 % 2,3  Same speech twice
 % 2,5  All speech
 % 0,5  All
-[mfcc_voice1 mfcc_voice2 mfcc_silence] = CreateMFCCSamples(0, 0, 0, 0);
+%[mfcc_voice1 mfcc_voice2 mfcc_silence] = CreateMFCCSamples(0, 0, 0, 0);
 %[mfcc_voice1 mfcc_voice2 mfcc_silence] = CreateMFCCSamples(0, 0, 2, 2);
-%[mfcc_voice1 mfcc_voice2 mfcc_silence] = CreateMFCCSamples(1, 0, 2, 3);
+[mfcc_voice1 mfcc_voice2 mfcc_silence] = CreateMFCCSamples(0, 0, 2, 3);
 %[mfcc_voice1 mfcc_voice2 mfcc_silence] = CreateMFCCSamples(1, 0, 2, 5);
 %[mfcc_voice1 mfcc_voice2 mfcc_silence] = CreateMFCCSamples(1, 0, 0, 5);
 
@@ -183,6 +185,13 @@ for UseClassificationMethod = UseClassificationMethodStart:UseClassificationMeth
             [Ctrain, Ctest] = GMM3D(V1new, V1tnew, V2new, V2tnew, Snew, Stnew, size(subSet,2)); % 3 or more features
             %GMM2D_train = 1-sum(diag(Ctrain))/sum(Ctrain(:)); % correct classification percentage
             GMM3D_test= 1-sum(diag(Ctest))/sum(Ctest(:)); % correct classification percentage
+        case 7
+            % 2D classification using the Expectation-Maximation (EM)
+            % algorithm for Gaussian Mixture Models in 2 dimensions
+            % A training is performed for each class V1, V2
+            % finding Gaussian mixture components for each class
+            [Ctrain, Ctest] = GMM2DComponents(V1new, V1tnew, V2new, V2tnew, 3); 
+            GMM2DComp_test= 1-sum(diag(Ctest))/sum(Ctest(:)); % correct classification percentage
         otherwise
             % Invalid classification parameter specifier
     end
@@ -190,7 +199,7 @@ for UseClassificationMethod = UseClassificationMethodStart:UseClassificationMeth
 end
 
 %% Printing final results
-if UseClassificationMethodStart == 0 && UseClassificationMethodEnd == 6
+if UseClassificationMethodStart == 0 && UseClassificationMethodEnd == 7
     ANN2D_train
     ANN2D_test
     
@@ -203,8 +212,8 @@ if UseClassificationMethodStart == 0 && UseClassificationMethodEnd == 6
     ANN3D_train
     ANN3D_test
     
-    %gausianDiscriminant_train
     gausianDiscriminant_test
     GMM2D_test
     GMM3D_test
+    GMM2DComp_test
 end
