@@ -1,18 +1,17 @@
-function [Ctrain, Ctest] = GMM2D(Ynew, Ytnew, Wnew, Wtnew, Znew, Ztnew)
+function [Ctrain, Ctest] = GMM2DComponents(Ynew, Ytnew, Wnew, Wtnew, ncentres)
 
-data = [Ynew(:,[1 2])];
+
+%% Voice 2
+data = Ynew(:,[1 2]);
 
 % plot data
 xi=min(data(:,1)); xf=max(data(:,1)); 
 yi=min(data(:,2)); yf=max(data(:,2));
-figure, scatter(Ynew(:,1), Ynew(:,2), 'r'), hold on
-scatter(Wnew(:,1), Wnew(:,2), 'g')
-scatter(Znew(:,1), Znew(:,2), 'b')
+figure, scatter(data(:,1), data(:,2), 'r')
 axis([xi xf yi yf])
-title('GMM2D training data V1(red), V2(green), S(blue)');
+title('GMM2D training data Voice 1');
 
 dimensions = 2;
-ncentres = 3; % number of mixtures - try using e.g. 3, 5 and 7..
 covartype = 'diag'; % covariance-matrix type.. 'spherical', 'diag' or 'full'
 mix = gmm(dimensions, ncentres, covartype);
 
@@ -40,19 +39,16 @@ hold on, scatter(data(:,1), data(:,2), 'y')
 title('Gaussian Mixture for Voice1');
 
 %% Voice 2
-data = [Wnew(:,[1 2])];
+data = Wnew(:,[1 2]);
 
 % plot data
 xi=min(data(:,1)); xf=max(data(:,1)); 
 yi=min(data(:,2)); yf=max(data(:,2));
-figure, scatter(Ynew(:,1), Ynew(:,2), 'r'), hold on
-scatter(Wnew(:,1), Wnew(:,2), 'g')
-scatter(Znew(:,1), Znew(:,2), 'b')
+figure, scatter(data(:,1), data(:,2), 'b')
 axis([xi xf yi yf])
-title('GMM2D training data V1(red), V2(green), S(blue)');
+title('GMM2D training data Voice 2');
 
 dimensions = 2;
-ncentres = 3; % number of mixtures - try using e.g. 3, 5 and 7..
 covartype = 'diag'; % covariance-matrix type.. 'spherical', 'diag' or 'full'
 mix = gmm(dimensions, ncentres, covartype);
 
@@ -84,42 +80,76 @@ title('Gaussian Mixture for Voice2');
 d = 2; % Number of classes
 
 % Selecting test sets
-tstC1 = [Ynew; Ytnew];
-tstC2 = [Wnew; Wtnew];
+test_v1 = Ytnew;
+test_v2 = Wtnew;
 
-tM1 = size(tstC1, 1); % Number of test samples
-tM2 = size(tstC2, 1);
+tM1 = size(test_v1, 1); % Number of test samples
+tM2 = size(test_v2, 1); 
 
-figure, scatter(tstC1(:,1), tstC1(:,2), 'r'), hold on, scatter(tstC2(:,1),tstC2(:,2), 'g')
-title('GMM2D train+test used for validation');
+figure, scatter(test_v1(:,1), test_v1(:,2), 'r'), hold on,
+scatter(test_v2(:,1), test_v2(:,2), 'b')
+title('GMM2D test set Voice 1 (red) Voice2 (blue) used for validation');
 
-for k = 1:mix.ncentres
+for k = 1:ncentres
 
     % 4. Posterior class probabilities P(C | x) using Bayes’ theorem
     % Prior probabiliies
     % 5. Now, we’re ready to use P(C | x) on a new (test) set. 
-    covar = zeros([dimensions dimensions]);
+    covarV1 = zeros([dimensions dimensions]);
+    covarV2 = zeros([dimensions dimensions]);
     for i = 1:dimensions
-        covar(i,i) = mix.covars(k,i);
+        covarV1(i,i) = mixV1.covars(k,i);
+        covarV2(i,i) = mixV2.covars(k,i);
     end
-    pC_v1(k,:) = bayesLogDiscriminator(tstC1, mix.centres(k,:), covar, mix.priors(k));
-    pC_v2(k,:) = bayesLogDiscriminator(tstC2, mix.centres(k,:), covar, mix.priors(k));
-
+    pC1_GMM1(k,:) = bayesLogDiscriminator(test_v1, mixV1.centres(k,:), covarV1, mixV1.priors(k));
+    pC1_GMM2(k,:) = bayesLogDiscriminator(test_v1, mixV2.centres(k,:), covarV2, mixV2.priors(k));
+    pC2_GMM1(k,:) = bayesLogDiscriminator(test_v2, mixV1.centres(k,:), covarV1, mixV1.priors(k));
+    pC2_GMM2(k,:) = bayesLogDiscriminator(test_v2, mixV2.centres(k,:), covarV2, mixV2.priors(k));
 end
 
-figure, 
+% figure, 
+% hold on
+% plot(pC1_GMM1(1,:), 'r');
+% plot(pC1_GMM1(2,:), 'b');
+% plot(pC1_GMM1(3,:), 'g');
+% title('GMM2D test if V1 belongs to GMV1_1(red), GMV1_2(blue), GMV1_3(green)');
+% 
+% figure, 
+% hold on
+% plot(pC1_GMM2(1,:), 'r');
+% plot(pC1_GMM2(2,:), 'b');
+% plot(pC1_GMM2(3,:), 'g');
+% title('GMM2D test if V1 belongs to GMV2_1(red), GMV2_2(blue), GMV2_3(green)');
+
+% Sum all Gausian Mixtures log-likelihoods - projection to each class 1, 2
+for i=1:tM1
+    pC_v1(1, i) = 0;
+    pC_v1(2, i) = 0;
+    for k = 1:ncentres
+        pC_v1(1, i) = pC_v1(1, i) + pC1_GMM1(k,i);
+        pC_v1(2, i) = pC_v1(2, i) + pC1_GMM2(k,i);
+    end
+end    
+for i=1:tM2
+    pC_v2(1, i) = 0;
+    pC_v2(2, i) = 0;
+    for k = 1:ncentres
+        pC_v2(1, i) = pC_v2(1, i) + pC2_GMM1(k,i);
+        pC_v2(2, i) = pC_v2(2, i) + pC2_GMM2(k,i);
+    end
+end
+
+figure,
 hold on
 plot(pC_v1(1,:), 'r');
-plot(pC_v1(2,:), 'g');
-plot(pC_v1(3,:), 'b');
-title('GMM2D test if V1 belongs to GM1(red), GM2(blue), GM3(green)');
+plot(pC_v1(2,:), 'b');
+title('GMM2D test if V1 belongs to GMV1(red), GMV2(blue)');
 
-figure, 
+figure,
 hold on
 plot(pC_v2(1,:), 'r');
-plot(pC_v2(2,:), 'g');
-plot(pC_v2(3,:), 'b');
-title('GMM2D test if V2 belongs to GM1(red), GM2(blue), GM3(green)');
+plot(pC_v2(2,:), 'b');
+title('GMM2D test if V2 belongs to GMV1(red), GMV2(blue)');
 
 k = 1;
 % Confusion matrix validation k = 1 and k = 2
