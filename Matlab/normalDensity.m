@@ -6,5 +6,6 @@ function [pX] = normalDensity(d, x, mean, covar)
 for r=1:size(x,1)
   z1 = (x(r,:) - mean);
   z2 = (z1 / covar) * z1';
-  pX(r) = 1/power((2*pi), d/2) * exp(-0.5*z2);
+  z3 = power((2*pi), d/2)*sqrt(det(covar));
+  pX(r) = 1/z3 * exp(-0.5*z2);
 end

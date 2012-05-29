@@ -20,11 +20,11 @@ w = 2; w0 = 0;
 y_log = (1./(1 + exp(-(w*x + w0)))); 
 subplot(311), plot(x, y_log)
 
-w = 2; w0 = 2;
+w = 4; w0 = 0;
 y_log = (1./(1 + exp(-(w*x + w0)))); 
 subplot(312), plot(x, y_log)
 
-w = 2; w0 = 6;
+w = 4; w0 = 12;
 y_log = (1./(1 + exp(-(w*x + w0)))); 
 subplot(313), plot(x, y_log)
 

@@ -1,5 +1,8 @@
 function [Ctrain, Ctest] = GMM2DComponents(Ynew, Ytnew, Wnew, Wtnew, ncentres)
 
+figure, scatter(Ynew(:,1), Ynew(:,2), 'r'), hold on,
+scatter(Wnew(:,1), Wnew(:,2), 'b')
+title('GMM2D training set Voice 1 (red) Voice2 (blue) used for validation');
 
 %% Voice 2
 data = Ynew(:,[1 2]);
@@ -7,9 +10,6 @@ data = Ynew(:,[1 2]);
 % plot data
 xi=min(data(:,1)); xf=max(data(:,1)); 
 yi=min(data(:,2)); yf=max(data(:,2));
-figure, scatter(data(:,1), data(:,2), 'r')
-axis([xi xf yi yf])
-title('GMM2D training data Voice 1');
 
 dimensions = 2;
 covartype = 'diag'; % covariance-matrix type.. 'spherical', 'diag' or 'full'
@@ -18,9 +18,9 @@ mix = gmm(dimensions, ncentres, covartype);
 opts = foptions; % standard options
 %opts(1) = 1; % show errors
 opts(1) = 0; % don't show errors
-opts(3) = 0.001; % stop-criterion of EM-algorithm
-opts(5) = 0; % do not reset covariance matrix in case of small singular values.. (1=do reset..)
-opts(14) = 50; % max number of iterations
+opts(3) = 0.0001; % stop-criterion of EM-algorithm
+opts(5) = 1; % do not reset covariance matrix in case of small singular values.. (1=do reset..)
+opts(14) = 100; % max number of iterations
 %[MIX, OPTIONS, ERRLOG] = GMMEM(MIX, X, OPTIONS)
 [mix, opts, errlog] = gmmem(mix, data, opts);
 
@@ -44,9 +44,6 @@ data = Wnew(:,[1 2]);
 % plot data
 xi=min(data(:,1)); xf=max(data(:,1)); 
 yi=min(data(:,2)); yf=max(data(:,2));
-figure, scatter(data(:,1), data(:,2), 'b')
-axis([xi xf yi yf])
-title('GMM2D training data Voice 2');
 
 dimensions = 2;
 covartype = 'diag'; % covariance-matrix type.. 'spherical', 'diag' or 'full'
@@ -55,9 +52,9 @@ mix = gmm(dimensions, ncentres, covartype);
 opts = foptions; % standard options
 %opts(1) = 1; % show errors
 opts(1) = 0; % don't show errors
-opts(3) = 0.001; % stop-criterion of EM-algorithm
-opts(5) = 0; % do not reset covariance matrix in case of small singular values.. (1=do reset..)
-opts(14) = 50; % max number of iterations
+opts(3) = 0.0001; % stop-criterion of EM-algorithm
+opts(5) = 1; % do not reset covariance matrix in case of small singular values.. (1=do reset..)
+opts(14) = 100; % max number of iterations
 %[MIX, OPTIONS, ERRLOG] = GMMEM(MIX, X, OPTIONS)
 [mix, opts, errlog] = gmmem(mix, data, opts);
 
@@ -77,7 +74,7 @@ title('Gaussian Mixture for Voice2');
 
 %% 2D example - classification against test set 
 
-d = 2; % Number of classes
+d = ncentres; % Number of classes
 
 % Selecting test sets
 test_v1 = Ytnew;
@@ -101,55 +98,38 @@ for k = 1:ncentres
         covarV1(i,i) = mixV1.covars(k,i);
         covarV2(i,i) = mixV2.covars(k,i);
     end
-    pC1_GMM1(k,:) = bayesLogDiscriminator(test_v1, mixV1.centres(k,:), covarV1, mixV1.priors(k));
-    pC1_GMM2(k,:) = bayesLogDiscriminator(test_v1, mixV2.centres(k,:), covarV2, mixV2.priors(k));
-    pC2_GMM1(k,:) = bayesLogDiscriminator(test_v2, mixV1.centres(k,:), covarV1, mixV1.priors(k));
-    pC2_GMM2(k,:) = bayesLogDiscriminator(test_v2, mixV2.centres(k,:), covarV2, mixV2.priors(k));
+    pC1_GMM1(k,:) = normalDensity(d, test_v1, mixV1.centres(k,:), covarV1)*mixV1.priors(k);
+    pC1_GMM2(k,:) = normalDensity(d, test_v1, mixV2.centres(k,:), covarV2)*mixV2.priors(k);
+    pC2_GMM1(k,:) = normalDensity(d, test_v2, mixV1.centres(k,:), covarV1)*mixV1.priors(k);
+    pC2_GMM2(k,:) = normalDensity(d, test_v2, mixV2.centres(k,:), covarV2)*mixV2.priors(k);
 end
 
-% figure, 
-% hold on
-% plot(pC1_GMM1(1,:), 'r');
-% plot(pC1_GMM1(2,:), 'b');
-% plot(pC1_GMM1(3,:), 'g');
-% title('GMM2D test if V1 belongs to GMV1_1(red), GMV1_2(blue), GMV1_3(green)');
-% 
-% figure, 
-% hold on
-% plot(pC1_GMM2(1,:), 'r');
-% plot(pC1_GMM2(2,:), 'b');
-% plot(pC1_GMM2(3,:), 'g');
-% title('GMM2D test if V1 belongs to GMV2_1(red), GMV2_2(blue), GMV2_3(green)');
+for k = 1:ncentres
+    pC1_GMM1(k,:) = pC1_GMM1(k,:) / sum(pC1_GMM1(k,:));
+    pC1_GMM2(k,:) = pC1_GMM2(k,:) / sum(pC1_GMM2(k,:));
+    pC2_GMM1(k,:) = pC2_GMM1(k,:) / sum(pC2_GMM1(k,:));
+    pC2_GMM2(k,:) = pC2_GMM2(k,:) / sum(pC2_GMM2(k,:));
+end
 
-% Sum all Gausian Mixtures log-likelihoods - projection to each class 1, 2
+% Product of all Gausian Mixtures log-likelihoods - projection to each class 1, 2
 for i=1:tM1
-    pC_v1(1, i) = 0;
-    pC_v1(2, i) = 0;
+    pC_v1(1, i) = 1;
+    pC_v1(2, i) = 1;
     for k = 1:ncentres
-        pC_v1(1, i) = pC_v1(1, i) + pC1_GMM1(k,i);
-        pC_v1(2, i) = pC_v1(2, i) + pC1_GMM2(k,i);
+        pC_v1(1, i) = pC_v1(1, i) * pC1_GMM1(k,i);
+        pC_v1(2, i) = pC_v1(2, i) * pC1_GMM2(k,i);
     end
 end    
 for i=1:tM2
-    pC_v2(1, i) = 0;
-    pC_v2(2, i) = 0;
+    pC_v2(1, i) = 1;
+    pC_v2(2, i) = 1;
     for k = 1:ncentres
-        pC_v2(1, i) = pC_v2(1, i) + pC2_GMM1(k,i);
-        pC_v2(2, i) = pC_v2(2, i) + pC2_GMM2(k,i);
+        pC_v2(1, i) = pC_v2(1, i) * pC2_GMM1(k,i);
+        pC_v2(2, i) = pC_v2(2, i) * pC2_GMM2(k,i);
     end
 end
 
-figure,
-hold on
-plot(pC_v1(1,:), 'r');
-plot(pC_v1(2,:), 'b');
-title('GMM2D test if V1 belongs to GMV1(red), GMV2(blue)');
 
-figure,
-hold on
-plot(pC_v2(1,:), 'r');
-plot(pC_v2(2,:), 'b');
-title('GMM2D test if V2 belongs to GMV1(red), GMV2(blue)');
 
 k = 1;
 % Confusion matrix validation k = 1 and k = 2
@@ -172,8 +152,28 @@ for i=1:tM2
     end;
 end;
 
+x1 = test_v1(:,1);
+y1 = test_v1(:,2);
+scatter(x1(t_est(1:tM1)==1), y1(t_est(1:tM1)==1), 'bx'),
+x2 = test_v2(:,1);
+y2 = test_v2(:,2);
+scatter(x2(t_est(tM1+1:end)==0), y2(t_est(tM1+1:end)==0), 'rx');
+
 Ctest = confmat(t, t_est') % uses PRTools
 err_test = 1-sum(diag(Ctest))/sum(Ctest(:)) % correct classification percentage
 
+
 Ctrain = 0;
+
+figure,
+hold on
+plot(log(pC_v1(1,:)), 'r');
+plot(log(pC_v1(2,:)), 'b');
+title('GMM2D test if V1 belongs to GMV1(red), GMV2(blue)');
+
+figure,
+hold on
+plot(log(pC_v2(1,:)), 'r');
+plot(log(pC_v2(2,:)), 'b');
+title('GMM2D test if V2 belongs to GMV1(red), GMV2(blue)');
 

@@ -11,7 +11,7 @@ opts = foptions; % standard options
 opts(1) = 0; % don't show errors
 opts(3) = 0.001; % stop-criterion of EM-algorithm
 opts(5) = 0; % do not reset covariance matrix in case of small singular values.. (1=do reset..)
-opts(14) = 50; % max number of iterations
+opts(14) = 100; % max number of iterations
 [mix, opts, errlog] = gmmem(mix, data, opts);
 
 mix % see contents..
