@@ -39,14 +39,14 @@ yt3 = Znew(:,2);
 
 %% Set up network parameters.
 % Artificial Neural Networks
-%outputfunc = 'logistic';  % output function
-outputfunc = 'softmax';  % output function
+outputfunc = 'logistic';  % output function
+%outputfunc = 'softmax';  % output function
 nin = 2;                % Number of inputs.
 nout = outputs;         % Number of outputs.
 
 % Parameters to vary
-nhidden = 12;			% Number of hidden units.
-alpha = 0.0001;			% Coefficient of weight-decay prior. 
+nhidden = 8;			% Number of hidden units.
+alpha = 0.001;			% Coefficient of weight-decay prior. 
 
 % Set up vector of options for the optimiser.
 options = zeros(1,18);
@@ -71,8 +71,8 @@ idx = 1;
 %stop = 0.2;
 %for alpha = start:0.01:stop 
 
-start = 50;
-stop = 200;
+start = 80;
+stop = 90;
 for opt = start:stop
     options(14) = opt;
     % create network (object)

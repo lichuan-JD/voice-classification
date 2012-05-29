@@ -39,14 +39,14 @@ title('ANN3D test data');
 
 %% Set up network parameters.
 % Artificial Neural Networks
-outputfunc = 'logistic';  % output function
-%outputfunc = 'softmax';  % output function
+%outputfunc = 'logistic';  % output function
+outputfunc = 'softmax';  % output function
 nin = dimensions;                % Number of inputs.
 nout = 3;               % Number of outputs.
 
 % Parameters to vary
 nhidden = 12;			% Number of hidden units.
-alpha = 0.25;			% Coefficient of weight-decay prior. 
+alpha = 0.001;			% Coefficient of weight-decay prior. 
 
 % Set up vector of options for the optimiser.
 options = zeros(1,18);
