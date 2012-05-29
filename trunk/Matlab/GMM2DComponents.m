@@ -104,32 +104,14 @@ for k = 1:ncentres
     pC2_GMM2(k,:) = normalDensity(d, test_v2, mixV2.centres(k,:), covarV2)*mixV2.priors(k);
 end
 
-for k = 1:ncentres
-    pC1_GMM1(k,:) = pC1_GMM1(k,:) / sum(pC1_GMM1(k,:));
-    pC1_GMM2(k,:) = pC1_GMM2(k,:) / sum(pC1_GMM2(k,:));
-    pC2_GMM1(k,:) = pC2_GMM1(k,:) / sum(pC2_GMM1(k,:));
-    pC2_GMM2(k,:) = pC2_GMM2(k,:) / sum(pC2_GMM2(k,:));
-end
-
-% Product of all Gausian Mixtures log-likelihoods - projection to each class 1, 2
 for i=1:tM1
-    pC_v1(1, i) = 1;
-    pC_v1(2, i) = 1;
-    for k = 1:ncentres
-        pC_v1(1, i) = pC_v1(1, i) * pC1_GMM1(k,i);
-        pC_v1(2, i) = pC_v1(2, i) * pC1_GMM2(k,i);
-    end
+    pC_v1(1, i) = max(pC1_GMM1(:,i));
+    pC_v1(2, i) = max(pC1_GMM2(:,i));
 end    
 for i=1:tM2
-    pC_v2(1, i) = 1;
-    pC_v2(2, i) = 1;
-    for k = 1:ncentres
-        pC_v2(1, i) = pC_v2(1, i) * pC2_GMM1(k,i);
-        pC_v2(2, i) = pC_v2(2, i) * pC2_GMM2(k,i);
-    end
+    pC_v2(1, i) = max(pC2_GMM1(:,i));
+    pC_v2(2, i) = max(pC2_GMM2(:,i));
 end
-
-
 
 k = 1;
 % Confusion matrix validation k = 1 and k = 2
@@ -137,18 +119,18 @@ t = [zeros(tM1,1) ; ones(tM2,1)];
 % Test for x (C1) belongs to C1 or C2
 for i=1:tM1
     if pC_v1(k, i) > pC_v1(k+1, i)
-        t_est(i) = 1;
-    else
         t_est(i) = 0;
+    else
+        t_est(i) = 1;
     end;
 end;
 
 % Test for y (C2) belongs to C1 or C2
 for i=1:tM2
     if pC_v2(k, i) > pC_v2(k+1, i)
-        t_est(i+tM1) = 1;
-    else
         t_est(i+tM1) = 0;
+    else
+        t_est(i+tM1) = 1;
     end;
 end;
 
