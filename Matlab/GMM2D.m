@@ -81,7 +81,7 @@ plot(pC_v2(2,:), 'g');
 plot(pC_v2(3,:), 'b');
 title('GMM2D test if V2 belongs to GM1(red), GM2(blue), GM3(green)');
 
-k = 1;
+k = 2;
 % Confusion matrix validation k = 1 and k = 2
 t = [zeros(tM1,1) ; ones(tM2,1)];
 % Test for x (C1) belongs to C1 or C2
