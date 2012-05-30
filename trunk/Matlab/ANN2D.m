@@ -71,8 +71,8 @@ idx = 1;
 %stop = 0.2;
 %for alpha = start:0.01:stop 
 
-start = 80;
-stop = 90;
+start = 40;
+stop = 60;
 for opt = start:stop
     options(14) = opt;
     % create network (object)
