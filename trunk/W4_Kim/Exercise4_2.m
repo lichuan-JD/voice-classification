@@ -22,8 +22,8 @@ nin = 2;                % Number of inputs.
 nout = 2;               % Number of outputs.
 
 % Parameters to vary
-nhidden = 5;			% Number of hidden units.
-alpha = 0.3;			% Coefficient of weight-decay prior. 
+nhidden = 8;			% Number of hidden units.
+alpha = 0.001;			% Coefficient of weight-decay prior. 
 
 % Set up vector of options for the optimiser.
 options = zeros(1,18);
@@ -38,14 +38,14 @@ idx = 1;
 %for nhidden = start:stop 
 
 % Find best training cycles
-%start = 10;
-%stop = 100;
-%for opt = start:stop
+start = 10;
+stop = 100;
+for opt = start:stop
 
 % Find best alpha
-start = 0.01;
-stop = 2.0;
-for alpha = start:0.01:stop    
+%start = 0.01;
+%stop = 2.0;
+%for alpha = start:0.01:stop    
     options(14) = opt;
     load('classification_2D_trainset')
     % create network (object)
@@ -69,14 +69,14 @@ for alpha = start:0.01:stop
     idx = idx + 1;
 end;
 
-x = start:0.01:stop;
-%x = start:stop;
+%x = start:0.01:stop;
+x = start:stop;
 figure(2), 
 hold on
 plot(x, err_train, 'b');
 plot(x, err_test, 'r');
 title('train error(blue) vs. test error (red)');
-xlabel('alpha');
+xlabel('training cycles');
 
 %% ANN.m reference 
 % Test on test set
