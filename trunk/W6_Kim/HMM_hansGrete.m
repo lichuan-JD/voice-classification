@@ -1,5 +1,6 @@
 
-clear 
+clear
+close all
 addpath('C:\IHA\TINONS1\HMMall\HMM')
 addpath('C:\IHA\TINONS1\HMMall\KPMtools')
 addpath('C:\IHA\TINONS1\HMMall\KPMstats')
