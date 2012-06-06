@@ -1,5 +1,9 @@
 
 clear
+addpath('C:\IHA\TINONS1\HMMall\HMM')
+addpath('C:\IHA\TINONS1\HMMall\KPMtools')
+addpath('C:\IHA\TINONS1\HMMall\KPMstats')
+
 %Exercise 1 :
 %In this exercise, Markov chains should be investigated. Experiment with “MarkovModels.m”. Try
 %to change the transition matrix and the initial probability p(z0) - observe the changes in the output.
