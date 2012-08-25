@@ -1,17 +1,20 @@
-function [Ctrain, Ctest] = GMM2DComponents(Ynew, Ytnew, Wnew, Wtnew, ncentres)
+function [Ctrain, Ctest] = GMM2DComponents(Ynew, Ytnew, Wnew, Wtnew, ncentres, dimensions)
 
-figure, scatter(Ynew(:,1), Ynew(:,2), 'r'), hold on,
+figure, scatter(Ynew(:,1), Ynew(:,2), '.r'), hold on,
 scatter(Wnew(:,1), Wnew(:,2), 'b')
 title('GMM2D training set Voice 1 (red) Voice2 (blue) used for validation');
 
 %% Voice 2
-data = Ynew(:,[1 2]);
-
+if dimensions == 2
+    data = Ynew(:,[1 2]);
+else
+    data = Ynew(:,[1 2 3]);    
+end
+    
 % plot data
 xi=min(data(:,1)); xf=max(data(:,1)); 
 yi=min(data(:,2)); yf=max(data(:,2));
 
-dimensions = 2;
 covartype = 'diag'; % covariance-matrix type.. 'spherical', 'diag' or 'full'
 mix = gmm(dimensions, ncentres, covartype);
 
@@ -38,14 +41,16 @@ figure, contour(xrange, yrange, ygrid, 0:0.01:0.3,'k-')
 hold on, scatter(data(:,1), data(:,2), 'y')
 title('Gaussian Mixture for Voice1');
 
-%% Voice 2
-data = Wnew(:,[1 2]);
-
+%% Voice 1
+if dimensions == 2
+    data = Wnew(:,[1 2]);
+else
+    data = Wnew(:,[1 2 3]);
+end
 % plot data
 xi=min(data(:,1)); xf=max(data(:,1)); 
 yi=min(data(:,2)); yf=max(data(:,2));
 
-dimensions = 2;
 covartype = 'diag'; % covariance-matrix type.. 'spherical', 'diag' or 'full'
 mix = gmm(dimensions, ncentres, covartype);
 
@@ -83,7 +88,7 @@ test_v2 = Wtnew;
 tM1 = size(test_v1, 1); % Number of test samples
 tM2 = size(test_v2, 1); 
 
-figure, scatter(test_v1(:,1), test_v1(:,2), 'r'), hold on,
+figure, scatter(test_v1(:,1), test_v1(:,2), '.r'), hold on,
 scatter(test_v2(:,1), test_v2(:,2), 'b')
 title('GMM2D test set Voice 1 (red) Voice2 (blue) used for validation');
 
@@ -159,3 +164,22 @@ plot(log(pC_v2(1,:)), 'r');
 plot(log(pC_v2(2,:)), 'b');
 title('GMM2D test if V2 belongs to GMV1(red), GMV2(blue)');
 
+order = 40;
+%hf = fir1(order, 0.1, rectwin(order+1));
+hf = fir1(order, 0.01, hann(order+1));
+
+fpC_v1_1 = filter(hf,1,pC_v1(1,:));
+fpC_v1_2 = filter(hf,1,pC_v1(2,:));
+figure,
+hold on
+plot(log(fpC_v1_1), '.r');
+plot(log(fpC_v1_2), 'b');
+title('GMM2D test LP filteret V1 belongs to GMV1(red), GMV2(blue)');
+
+fpC_v2_1 = filter(hf,1,pC_v2(1,:));
+fpC_v2_2 = filter(hf,1,pC_v2(2,:));
+figure,
+hold on
+plot(log(fpC_v2_1), 'r');
+plot(log(fpC_v2_2), '.b');
+title('GMM2D test LP filteret V2 belongs to GMV1(red), GMV2(blue)');

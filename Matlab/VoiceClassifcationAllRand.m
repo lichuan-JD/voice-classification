@@ -5,18 +5,18 @@ UsePCA_MDAFeatureReduction = 1 % 0=none, 1=PCA, 2=MDA
 % UseClassificationMethod : 0=2D, 1=3D, 2 = ANN2D, 3 = ANN3D, 
 %                           4 = Bayesian decision theory, 
 %                           5 = GMM2D, 6 = GMM3D, 7 = GMM2DComp 
-UseClassificationMethodStart = 0
+UseClassificationMethodStart = 7
 UseClassificationMethodEnd = 7
-UseSizeTrainSet = 94 % Op or Ned or same speech
-UseSizeTestSet = 94
+%UseSizeTrainSet = 94 % Op or Ned or same speech
+%UseSizeTestSet = 94
 
 %UseSizeTrainSet = 188 % Op and Ned or same speech
 %UseSizeTestSet = 188
 %UseSizeTrainSet = 377 % Same speech twice
 %UseSizeTestSet = 377
-%UseSizeTrainSet = 1700 % All samples for GMM2DComp
-%UseSizeTestSet = 150
-UseRandomisation = 0 % 0, 1, 2 (Mixed)
+UseSizeTrainSet = 1700 % All samples for GMM2DComp
+UseSizeTestSet = 150
+UseRandomisation = 2 % 0, 1, 2 (Mixed)
 
 % Start, End
 % 0,1  Op/Ned
@@ -25,11 +25,11 @@ UseRandomisation = 0 % 0, 1, 2 (Mixed)
 % 2,5  All speech
 % 0,5  All
 %[mfcc_voice1 mfcc_voice2 mfcc_silence] = CreateMFCCSamples(0, 0, 0, 0); % Op
-[mfcc_voice1 mfcc_voice2 mfcc_silence] = CreateMFCCSamples(1, 0, 1, 1); % Ned
+%[mfcc_voice1 mfcc_voice2 mfcc_silence] = CreateMFCCSamples(1, 0, 1, 1); % Ned
 %[mfcc_voice1 mfcc_voice2 mfcc_silence] = CreateMFCCSamples(1, 0, 2, 2);
 %[mfcc_voice1 mfcc_voice2 mfcc_silence] = CreateMFCCSamples(1, 0, 0, 5);
 %[mfcc_voice1 mfcc_voice2 mfcc_silence] = CreateMFCCSamples(1, 0, 2, 5);
-%[mfcc_voice1 mfcc_voice2 mfcc_silence] = CreateMFCCSamples(1, 0, 0, 5);
+[mfcc_voice1 mfcc_voice2 mfcc_silence] = CreateMFCCSamples(0, 0, 0, 5);
 
 features = size(mfcc_voice1, 2)
 samples_total = size(mfcc_voice1, 1)
@@ -70,7 +70,9 @@ for UseClassificationMethod = UseClassificationMethodStart:UseClassificationMeth
             case 5 % GMM 2D
                 subSet = [1 2];
             case 6 % GMM 3D
-                subSet = [1 2 3];
+                subSet = [1 2 3];                
+            case 7 % GMM Comp
+                subSet = [1 2];
             otherwise
                 subSet = [1 2];
         end
@@ -195,7 +197,7 @@ for UseClassificationMethod = UseClassificationMethodStart:UseClassificationMeth
             % algorithm for Gaussian Mixture Models in 2 dimensions
             % A training is performed for each class V1, V2
             % finding Gaussian mixture components for each class
-            [Ctrain, Ctest] = GMM2DComponents(V1new, V1tnew, V2new, V2tnew, 4); 
+            [Ctrain, Ctest] = GMM2DComponents(V1new, V1tnew, V2new, V2tnew, 4, 2); 
             GMM2DComp_test= 1-sum(diag(Ctest))/sum(Ctest(:)); % correct classification percentage
         otherwise
             % Invalid classification parameter specifier

@@ -72,7 +72,7 @@ idx = 1;
 %for alpha = start:0.01:stop 
 
 start = 40;
-stop = 60;
+stop = 50;
 for opt = start:stop
     options(14) = opt;
     % create network (object)
@@ -117,8 +117,8 @@ if outputs == 2 % Number of output classes
 end
 
 % draw decision boundary
-%xi=-10; xf=10; yi=-8; yf=8; 
-xi=-4; xf=2; yi=-3; yf=2; 
+xi=-10; xf=10; yi=-8; yf=8; 
+%xi=-4; xf=2; yi=-3; yf=2; 
 inc=0.01;
 xrange = xi:inc:xf;
 yrange = yi:inc:yf;
