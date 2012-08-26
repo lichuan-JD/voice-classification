@@ -66,7 +66,7 @@ idx = 1;
 %for alpha = start:0.1:stop    
 
 % Find best training cycles
-start = 40;
+start = 49;
 stop = 50;
 for opt = start:stop
 

@@ -1,12 +1,12 @@
 clear;
-close all;
 
 UsePCA_MDAFeatureReduction = 1 % 0=none, 1=PCA, 2=MDA
-% UseClassificationMethod : 0=2D, 1=3D, 2 = ANN2D, 3 = ANN3D, 
-%                           4 = Bayesian decision theory, 
-%                           5 = GMM2D, 6 = GMM3D, 
-%                           7 = GMM2DComp, 8 = GMM3DComp 
-UseClassificationMethodStart = 8
+% UseClassificationMethod : 0=2D, 1=3D, 2 = ANN2D, 
+%                           3 = Bayesian decision theory, 
+%                           4 = GMM2D, 5 = GMM3D, 
+%                           6 = GMM2DComp, 
+%                           7 = ANN3D, 8 = GMM3DComp 
+UseClassificationMethodStart = 7
 UseClassificationMethodEnd = 8
 %UseSizeTrainSet = 94 % Op or Ned or same speech
 %UseSizeTestSet = 94
@@ -18,7 +18,17 @@ UseClassificationMethodEnd = 8
 UseSizeTrainSet = 1700 % All samples for GMM2DComp
 UseSizeTestSet = 150
 UseRandomisation = 2 % 0, 1, 2 (Mixed)
+EndLoopDimensions = 12 % 3-12
 
+% Clear results
+GMMtest_error(2) = 0.36;
+ANNtest_error(2) = 0.35;
+
+% Loop dimensions
+for dimensions = 3:EndLoopDimensions
+    
+close all;
+    
 % Start, End
 % 0,1  Op/Ned
 % 2,2  Same speech
@@ -65,15 +75,14 @@ for UseClassificationMethod = UseClassificationMethodStart:UseClassificationMeth
         switch UseClassificationMethod
             case 1 % Linear 3D
                 subSet = [1 2 3];
-            case 3 % ANN 3D - select features
-                subSet = [1 2 3 4]; % Good
-                %subSet = [1 2 3 4 5]; Too many
-            case 5 % GMM 2D
+            case 4 % GMM 2D
                 subSet = [1 2];
-            case 6 % GMM 3D
+            case 5 % GMM 3D
                 subSet = [1 2 3];                
+            case 7 % ANN 3D - select features
+                subSet = 1:dimensions;
             case 8 % GMM 3D Comp
-                subSet = [1 2 3 4];
+                subSet = 1:dimensions; 
             otherwise
                 subSet = [1 2];
         end
@@ -84,9 +93,11 @@ for UseClassificationMethod = UseClassificationMethodStart:UseClassificationMeth
         switch UseClassificationMethod
             case 1 % Linear 3D
                 subSet = [1 2 3];
-            case 3 % ANN 3D - select features
+            case 5 % GMM 3D
                 subSet = [1 2 3];
-            case 6 % GMM 3D
+            case 7 % ANN 3D - select features
+                subSet = [1 2 3];
+            case 8 % GMM 3D Comp - select features
                 subSet = [1 2 3];
             otherwise
                 subSet = [1 2];
@@ -167,17 +178,12 @@ for UseClassificationMethod = UseClassificationMethodStart:UseClassificationMeth
             ANN2D_train = 1-sum(diag(Ctrain))/sum(Ctrain(:)); % correct classification percentage
             ANN2D_test= 1-sum(diag(Ctest))/sum(Ctest(:)); % correct classification percentage
         case 3
-            % 3D classification using Artificial Neural Networks
-            [Ctrain, Ctest] = ANN3D(V1new, V1tnew, V2new, V2tnew, Snew, Stnew, size(subSet,2)); % 3 or more features
-            ANN3D_train = 1-sum(diag(Ctrain))/sum(Ctrain(:)); % correct classification percentage
-            ANN3D_test= 1-sum(diag(Ctest))/sum(Ctest(:)); % correct classification percentage
-        case 4
             % Classification based on Bayesian decision theory
             % Assuming a normal distribution of class features
             [t_est, Ctest] = gausianDiscriminant(V1new, V1tnew, V2new, V2tnew); % 2 features only
             %gausianDiscriminant_train = 1-sum(diag(Ctrain))/sum(Ctrain(:)); % correct classification percentage
             gausianDiscriminant_test= 1-sum(diag(Ctest))/sum(Ctest(:)); % correct classification percentage
-        case 5
+        case 4
             % 2D classification using the Expectation-Maximation (EM)
             % algorithm for Gaussian Mixture Models in 2 dimensions
             % A training is performed for each class V1, V2 and silence
@@ -185,7 +191,7 @@ for UseClassificationMethod = UseClassificationMethodStart:UseClassificationMeth
             [Ctrain, Ctest] = GMM2D(V1new, V1tnew, V2new, V2tnew, Snew, Stnew); 
             %GMM2D_train = 1-sum(diag(Ctrain))/sum(Ctrain(:)); % correct classification percentage
             GMM2D_test= 1-sum(diag(Ctest))/sum(Ctest(:)); % correct classification percentage
-        case 6
+        case 5
             % 3D classification using the Expectation-Maximation (EM)
             % algorithm for Gaussian Mixture Models in 3 dimensions or more
             % A training is performed for each class V1, V2 and silence
@@ -193,13 +199,19 @@ for UseClassificationMethod = UseClassificationMethodStart:UseClassificationMeth
             [Ctrain, Ctest] = GMM3D(V1new, V1tnew, V2new, V2tnew, Snew, Stnew, size(subSet,2)); % 3 or more features
             %GMM2D_train = 1-sum(diag(Ctrain))/sum(Ctrain(:)); % correct classification percentage
             GMM3D_test= 1-sum(diag(Ctest))/sum(Ctest(:)); % correct classification percentage
-        case 7
+        case 6
             % 2D classification using the Expectation-Maximation (EM)
             % algorithm for Gaussian Mixture Models in 2 dimensions
             % A training is performed for each class V1, V2
             % finding Gaussian mixture components for each class
             [Ctrain, Ctest] = GMM2DComponents(V1new, V1tnew, V2new, V2tnew, 4); 
             GMM2DComp_test= 1-sum(diag(Ctest))/sum(Ctest(:)); % correct classification percentage
+        case 7
+            % 3D classification using Artificial Neural Networks
+            [Ctrain, Ctest] = ANN3D(V1new, V1tnew, V2new, V2tnew, Snew, Stnew, size(subSet,2)); % 3 or more features
+            ANN3D_train = 1-sum(diag(Ctrain))/sum(Ctrain(:)); % correct classification percentage
+            ANN3D_test= 1-sum(diag(Ctest))/sum(Ctest(:)); % correct classification percentage
+            ANNtest_error(dimensions) = ANN3D_test;
         case 8
             % 3D classification using the Expectation-Maximation (EM)
             % algorithm for Gaussian Mixture Models in 2 dimensions
@@ -207,10 +219,25 @@ for UseClassificationMethod = UseClassificationMethodStart:UseClassificationMeth
             % finding Gaussian mixture components for each class
             [Ctrain, Ctest] = GMM3DComponents(V1new, V1tnew, V2new, V2tnew, 4, size(subSet,2)); 
             GMM3DComp_test= 1-sum(diag(Ctest))/sum(Ctest(:)); % correct classification percentage
+            GMMtest_error(dimensions) = GMM3DComp_test;
         otherwise
             % Invalid classification parameter specifier
     end
     
+end
+
+end
+
+if UseClassificationMethodStart == 7 && UseClassificationMethodEnd == 8
+    figure, hold on,
+    plot(GMMtest_error, '*r');
+    plot(ANNtest_error, 'ob');
+    hold off;
+    title('ANN(o) and GMM(*) classifcation error vs. dimensions');
+    xlabel('dimensions');
+    ylabel('test error');
+    save GMMtest_error;
+    save ANNtest_error;
 end
 
 %% Printing final results
