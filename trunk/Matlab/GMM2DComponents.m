@@ -169,6 +169,8 @@ hold on
 plot(log(fpC_v1_1), '.r');
 plot(log(fpC_v1_2), 'b');
 title('GMM2D test LP filteret V1 belongs to GMV1(red), GMV2(blue)');
+xlabel('MFCC sample');
+ylabel('probability logarithmic');
 
 fpC_v2_1 = filter(hf,1,pC_v2(1,:));
 fpC_v2_2 = filter(hf,1,pC_v2(2,:));
@@ -177,3 +179,6 @@ hold on
 plot(log(fpC_v2_1), 'r');
 plot(log(fpC_v2_2), '.b');
 title('GMM2D test LP filteret V2 belongs to GMV1(red), GMV2(blue)');
+xlabel('MFCC sample');
+ylabel('probability logarithmic');
+
