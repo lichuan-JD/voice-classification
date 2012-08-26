@@ -67,7 +67,7 @@ idx = 1;
 
 % Find best training cycles
 start = 40;
-stop = 60;
+stop = 50;
 for opt = start:stop
 
     options(14) = opt;
