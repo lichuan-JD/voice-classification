@@ -1,15 +1,12 @@
-function [Ctrain, Ctest] = GMM2DComponents(Ynew, Ytnew, Wnew, Wtnew, ncentres, dimensions)
+function [Ctrain, Ctest] = GMM2DComponents(Ynew, Ytnew, Wnew, Wtnew, ncentres)
 
 figure, scatter(Ynew(:,1), Ynew(:,2), '.r'), hold on,
 scatter(Wnew(:,1), Wnew(:,2), 'b')
 title('GMM2D training set Voice 1 (red) Voice2 (blue) used for validation');
 
 %% Voice 2
-if dimensions == 2
-    data = Ynew(:,[1 2]);
-else
-    data = Ynew(:,[1 2 3]);    
-end
+dimensions = 2;
+data = Ynew(:,[1 2]);
     
 % plot data
 xi=min(data(:,1)); xf=max(data(:,1)); 
@@ -42,11 +39,8 @@ hold on, scatter(data(:,1), data(:,2), 'y')
 title('Gaussian Mixture for Voice1');
 
 %% Voice 1
-if dimensions == 2
-    data = Wnew(:,[1 2]);
-else
-    data = Wnew(:,[1 2 3]);
-end
+data = Wnew(:,[1 2]);
+
 % plot data
 xi=min(data(:,1)); xf=max(data(:,1)); 
 yi=min(data(:,2)); yf=max(data(:,2));
