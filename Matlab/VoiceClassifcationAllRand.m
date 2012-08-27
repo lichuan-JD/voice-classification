@@ -1,5 +1,7 @@
 clear;
 
+% User configuration for data sets with 94 samples including words 
+% with few phonemes non randomized
 UsePCA_MDAFeatureReduction = 1 % 0=none, 1=PCA, 2=MDA
 % UseClassificationMethod : 0=2D, 1=3D, 2 = ANN2D, 
 %                           3 = Bayesian decision theory, 
@@ -8,17 +10,25 @@ UsePCA_MDAFeatureReduction = 1 % 0=none, 1=PCA, 2=MDA
 %                           7 = ANN3D, 8 = GMM3DComp 
 UseClassificationMethodStart = 7
 UseClassificationMethodEnd = 8
-%UseSizeTrainSet = 94 % Op or Ned or same speech
-%UseSizeTestSet = 94
+UseSizeTrainSet = 94 % Op or Ned or same speech
+UseSizeTestSet = 94
+UseRandomisation = 0 % 0, 1, 2 (Mixed)
+EndLoopDimensions = 12 % 3-12
 
+% Alternative tests
 %UseSizeTrainSet = 188 % Op and Ned or same speech
 %UseSizeTestSet = 188
 %UseSizeTrainSet = 377 % Same speech twice
 %UseSizeTestSet = 377
-UseSizeTrainSet = 1700 % All samples for GMM2DComp
-UseSizeTestSet = 150
-UseRandomisation = 2 % 0, 1, 2 (Mixed)
-EndLoopDimensions = 12 % 3-12
+
+% User configuration for final test
+% UsePCA_MDAFeatureReduction = 1 % 0=none, 1=PCA, 2=MDA
+% UseClassificationMethodStart = 7
+% UseClassificationMethodEnd = 8
+% UseSizeTrainSet = 1700 % All samples for GMM2DComp
+% UseSizeTestSet = 150
+% UseRandomisation = 2 % 0, 1, 2 (Mixed)
+% EndLoopDimensions = 12 % 3-12
 
 % Clear results
 GMMtest_error(2) = 0.36;
@@ -36,7 +46,7 @@ close all;
 % 2,5  All speech
 % 0,5  All
 %[mfcc_voice1 mfcc_voice2 mfcc_silence] = CreateMFCCSamples(0, 0, 0, 0); % Op
-%[mfcc_voice1 mfcc_voice2 mfcc_silence] = CreateMFCCSamples(1, 0, 1, 1); % Ned
+[mfcc_voice1 mfcc_voice2 mfcc_silence] = CreateMFCCSamples(0, 0, 1, 1); % Ned
 %[mfcc_voice1 mfcc_voice2 mfcc_silence] = CreateMFCCSamples(1, 0, 2, 2);
 %[mfcc_voice1 mfcc_voice2 mfcc_silence] = CreateMFCCSamples(1, 0, 0, 5);
 %[mfcc_voice1 mfcc_voice2 mfcc_silence] = CreateMFCCSamples(1, 0, 2, 5);
