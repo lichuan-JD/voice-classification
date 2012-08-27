@@ -75,10 +75,14 @@ for k = 1:ncentres
 end
 
 for i=1:tM1
+%    pC_v1(1, i) = sum(pC1_GMM1(:,i));
+%    pC_v1(2, i) = sum(pC1_GMM2(:,i));
     pC_v1(1, i) = max(pC1_GMM1(:,i));
     pC_v1(2, i) = max(pC1_GMM2(:,i));
 end    
 for i=1:tM2
+%    pC_v2(1, i) = sum(pC2_GMM1(:,i));
+%    pC_v2(2, i) = sum(pC2_GMM2(:,i));
     pC_v2(1, i) = max(pC2_GMM1(:,i));
     pC_v2(2, i) = max(pC2_GMM2(:,i));
 end
