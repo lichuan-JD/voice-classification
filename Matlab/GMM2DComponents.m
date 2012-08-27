@@ -1,8 +1,8 @@
 function [Ctrain, Ctest] = GMM2DComponents(Ynew, Ytnew, Wnew, Wtnew, ncentres)
 
-figure, scatter(Ynew(:,1), Ynew(:,2), '.r'), hold on,
+figure, scatter(Ynew(:,1), Ynew(:,2), '*r'), hold on,
 scatter(Wnew(:,1), Wnew(:,2), 'b')
-title('GMM2D training set Voice 1 (red) Voice2 (blue) used for validation');
+title('GMM2D training set Voice 1(*) Voice2(O) used for validation');
 
 %% Voice 2
 dimensions = 2;
@@ -82,9 +82,9 @@ test_v2 = Wtnew;
 tM1 = size(test_v1, 1); % Number of test samples
 tM2 = size(test_v2, 1); 
 
-figure, scatter(test_v1(:,1), test_v1(:,2), '.r'), hold on,
+figure, scatter(test_v1(:,1), test_v1(:,2), '*r'), hold on,
 scatter(test_v2(:,1), test_v2(:,2), 'b')
-title('GMM2D test set Voice 1 (red) Voice2 (blue) used for validation');
+title('GMM2D test set Voice 1(*) and Voice 2(O) used for validation');
 
 for k = 1:ncentres
 
@@ -104,12 +104,16 @@ for k = 1:ncentres
 end
 
 for i=1:tM1
-    pC_v1(1, i) = max(pC1_GMM1(:,i));
-    pC_v1(2, i) = max(pC1_GMM2(:,i));
+    pC_v1(1, i) = sum(pC1_GMM1(:,i));
+    pC_v1(2, i) = sum(pC1_GMM2(:,i));
+%    pC_v1(1, i) = max(pC1_GMM1(:,i));
+%    pC_v1(2, i) = max(pC1_GMM2(:,i));
 end    
 for i=1:tM2
-    pC_v2(1, i) = max(pC2_GMM1(:,i));
-    pC_v2(2, i) = max(pC2_GMM2(:,i));
+    pC_v2(1, i) = sum(pC2_GMM1(:,i));
+    pC_v2(2, i) = sum(pC2_GMM2(:,i));
+%    pC_v2(1, i) = max(pC2_GMM1(:,i));
+%    pC_v2(2, i) = max(pC2_GMM2(:,i));
 end
 
 k = 1;
@@ -135,10 +139,10 @@ end;
 
 x1 = test_v1(:,1);
 y1 = test_v1(:,2);
-scatter(x1(t_est(1:tM1)==1), y1(t_est(1:tM1)==1), 'bx'),
+scatter(x1(t_est(1:tM1)==1), y1(t_est(1:tM1)==1), 'bd'),
 x2 = test_v2(:,1);
 y2 = test_v2(:,2);
-scatter(x2(t_est(tM1+1:end)==0), y2(t_est(tM1+1:end)==0), 'rx');
+scatter(x2(t_est(tM1+1:end)==0), y2(t_est(tM1+1:end)==0), 'rd');
 
 Ctest = confmat(t, t_est') % uses PRTools
 err_test = 1-sum(diag(Ctest))/sum(Ctest(:)) % correct classification percentage
