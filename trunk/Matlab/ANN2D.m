@@ -104,7 +104,7 @@ xlabel('training iterations');
 
 % Plot training set
 figure,
-scatter(x1, y1, 'r'), hold on, scatter(x2, y2, 'g'), 
+scatter(x1, y1, 'r'), hold on, scatter(x2, y2, 'y'), 
 if outputs == 3 % Number of output classes
     scatter(x3, y3, 'b');
 end
@@ -112,7 +112,7 @@ y_est = mlpfwd(net, train_data);
 [max_val,max_id] = max(y_est'); % find max. values
 t_est = max_id - 1 ; % id is 1,2,3.. in matlab - not 0,1,2..
 if outputs == 2 % Number of output classes
-    scatter(x1(t_est(1:N1)==1), y1(t_est(1:N1)==1), 200, 'gx')
+    scatter(x1(t_est(1:N1)==1), y1(t_est(1:N1)==1), 200, 'yx')
     scatter(x2(t_est(N1+1:end)==0), y2(t_est(N1+1:end)==0), 200, 'rx')
 end
 
@@ -132,7 +132,7 @@ title('ANN2D countors on train set');
 
 % Plot test set
 figure,
-scatter(xt1, yt1, 'r'), hold on, scatter(xt2, yt2, 'g'), 
+scatter(xt1, yt1, 'r'), hold on, scatter(xt2, yt2, 'y'), 
 if outputs == 3 % Number of output classes
     scatter(xt3, yt3, 'b');
 end
@@ -140,7 +140,7 @@ y_est = mlpfwd(net, test_data);
 [max_val,max_id] = max(y_est'); % find max. values
 t_est = max_id - 1 ; % id is 1,2,3.. in matlab - not 0,1,2..
 if outputs == 2 % Number of output classes
-    scatter(xt1(t_est(1:Nt1)==1), yt1(t_est(1:Nt1)==1), 200, 'gx')
+    scatter(xt1(t_est(1:Nt1)==1), yt1(t_est(1:Nt1)==1), 200, 'yx')
     scatter(xt2(t_est(Nt1+1:end)==0), yt2(t_est(Nt1+1:end)==0), 200, 'rx')
 end
 
