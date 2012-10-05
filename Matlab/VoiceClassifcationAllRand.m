@@ -2,18 +2,18 @@ clear;
 
 % User configuration for data sets with 94 samples including words 
 % with few phonemes non randomized
-UsePCA_MDAFeatureReduction = 1 % 0=none, 1=PCA, 2=MDA
+%UsePCA_MDAFeatureReduction = 1 % 0=none, 1=PCA, 2=MDA
 % UseClassificationMethod : 0=2D, 1=3D, 2 = ANN2D, 
 %                           3 = Bayesian decision theory, 
 %                           4 = GMM2D, 5 = GMM3D, 
 %                           6 = GMM2DComp, 
 %                           7 = ANN3D, 8 = GMM3DComp 
-UseClassificationMethodStart = 7
-UseClassificationMethodEnd = 8
-UseSizeTrainSet = 94 % Op or Ned or same speech
-UseSizeTestSet = 94
-UseRandomisation = 0 % 0, 1, 2 (Mixed)
-EndLoopDimensions = 12 % 3-12
+%UseClassificationMethodStart = 7
+%UseClassificationMethodEnd = 8
+%UseSizeTrainSet = 94 % Op or Ned or same speech
+%UseSizeTestSet = 94
+%UseRandomisation = 0 % 0, 1, 2 (Mixed)
+%EndLoopDimensions = 12 % 3-12
 
 % Alternative tests
 %UseSizeTrainSet = 188 % Op and Ned or same speech
@@ -22,13 +22,13 @@ EndLoopDimensions = 12 % 3-12
 %UseSizeTestSet = 377
 
 % User configuration for final test
-% UsePCA_MDAFeatureReduction = 1 % 0=none, 1=PCA, 2=MDA
-% UseClassificationMethodStart = 7
-% UseClassificationMethodEnd = 8
-% UseSizeTrainSet = 1700 % All samples for GMM2DComp
-% UseSizeTestSet = 150
-% UseRandomisation = 2 % 0, 1, 2 (Mixed)
-% EndLoopDimensions = 12 % 3-12
+UsePCA_MDAFeatureReduction = 1 % 0=none, 1=PCA, 2=MDA
+UseClassificationMethodStart = 7
+UseClassificationMethodEnd = 8
+UseSizeTrainSet = 1700 % All samples for GMM2DComp
+UseSizeTestSet = 150
+UseRandomisation = 2 % 0, 1, 2 (Mixed)
+EndLoopDimensions = 12 % 3-12
 
 % Clear results
 GMMtest_error(2) = 0.36;
