@@ -127,7 +127,7 @@ ygrid = mlpfwd(net, [X(:) Y(:)]);
 ygrid(:,1) = ygrid(:,1)-ygrid(:,2); % difference between output 1 and 2 - will be 0 at decision boundary
 ygrid = reshape(ygrid(:,1),size(X));
 contour(xrange, yrange, ygrid, [0 0], 'k-')
-title('ANN2D countors on train set');
+title('ANN2D contour on train set');
 
 
 % Plot test set
@@ -154,7 +154,7 @@ ygrid = mlpfwd(net, [X(:) Y(:)]);
 ygrid(:,1) = ygrid(:,1)-ygrid(:,2); % difference between output 1 and 2 - will be 0 at decision boundary
 ygrid = reshape(ygrid(:,1),size(X));
 contour(xrange, yrange, ygrid, [0 0], 'k-')
-title('ANN2D countors on test set');
+title('ANN2D contour on test set');
 
 
 % calculate test and training set errors
