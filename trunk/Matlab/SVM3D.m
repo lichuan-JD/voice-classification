@@ -7,7 +7,7 @@ kernel = 'rbf'; % Gaussian Radial Basis Funciton kernel
 %kernel = 'linear'; % Linear
 
 sz = size(Ytnew,1);
-data = [Ynew(1:sz,:); Wnew(1:sz,:)]; % Train data with 2 classes and 2 dimensions
+data = [Ynew(1:sz,:); Wnew(1:sz,:)]; % Train data with 2 classes and N dimensions
 
 % plot data
 % xi=min(data(:,1)); xf=max(data(:,1)); 
@@ -31,7 +31,7 @@ svmStruct = svmtrain(data, groups, 'Kernel_Function', kernel, 'showplot',false);
 
 %% SVM test
 % NB - data must be the same size as datatest
-datatest = [Ytnew; Wtnew]; % Test data with 2 classes and 2 dimensions
+datatest = [Ytnew; Wtnew]; % Test data with 2 classes and N dimensions
 t = [ones(size(Ytnew,1),1); zeros(size(Wtnew,1),1)];
 %groupstest = logical(t);
 
