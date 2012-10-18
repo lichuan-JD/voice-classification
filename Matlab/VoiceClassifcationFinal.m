@@ -24,8 +24,8 @@ clear;
 
 % User configuration for final test
 UsePCA_MDAFeatureReduction = 2 % 0=none, 1=PCA, 2=MDA
-UseClassificationMethodStart = 9
-UseClassificationMethodEnd = 9
+UseClassificationMethodStart = 10
+UseClassificationMethodEnd = 10
 UseSizeTrainSet = 1700 % All samples for GMM2DComp
 UseSizeTestSet = 150
 UseRandomisation = 2 % 0, 1, 2 (Mixed)
@@ -34,6 +34,7 @@ EndLoopDimensions = 3 % 3-12
 % Clear results
 GMMtest_error(2) = 0.36;
 ANNtest_error(2) = 0.35;
+SVMtest_error(2) = 0.41;
 
 % Loop dimensions
 for dimensions = 3:EndLoopDimensions
@@ -94,7 +95,7 @@ for UseClassificationMethod = UseClassificationMethodStart:UseClassificationMeth
                 subSet = 1:dimensions;
             case 8 % GMM 3D Comp
                 subSet = 1:dimensions; 
-            case 10 % SVM 3D
+            case 9 % SVM 3D
                 subSet = 1:dimensions; 
             otherwise
                 subSet = [1 2];
@@ -112,6 +113,8 @@ for UseClassificationMethod = UseClassificationMethodStart:UseClassificationMeth
                 subSet = [1 2 3];
             case 8 % GMM 3D Comp - select features
                 subSet = [1 2 3];
+            case 9 % SVM 3D
+                subSet = [1 2 3]; 
             otherwise
                 subSet = [1 2];
         end
@@ -234,16 +237,16 @@ for UseClassificationMethod = UseClassificationMethodStart:UseClassificationMeth
             GMM3DComp_test= 1-sum(diag(Ctest))/sum(Ctest(:)); % correct classification percentage
             GMMtest_error(dimensions) = GMM3DComp_test;
         case 9 
-            % 2D classification using Support Vector Maschines
-            % Define kernel fucntion to be used inside function
-            [Ctrain, Ctest] = SVM2D(V1new, V1tnew, V2new, V2tnew);        
-            SVM2D_test= 1-sum(diag(Ctest))/sum(Ctest(:)); % correct classification percentage
-        case 10 
             % 3D or more classification using Support Vector Maschines
             % Define kernel fucntion to be used inside function
             [Ctrain, Ctest] = SVM3D(V1new, V1tnew, V2new, V2tnew);        
             SVM3D_test= 1-sum(diag(Ctest))/sum(Ctest(:)); % correct classification percentage
             SVMtest_error(dimensions) = SVM3D_test;
+        case 10 
+            % 2D classification using Support Vector Maschines
+            % Define kernel fucntion to be used inside function
+            [Ctrain, Ctest] = SVM2D(V1new, V1tnew, V2new, V2tnew);        
+            SVM2D_test= 1-sum(diag(Ctest))/sum(Ctest(:)); % correct classification percentage
         otherwise
             % Invalid classification parameter specifier
     end
@@ -252,25 +255,22 @@ end
 
 end
 
-if UseClassificationMethodEnd == 10
-    plot(SVMtest_error, '*r');
-    save SVMtest_error;
-end
-
-if UseClassificationMethodStart == 7 && UseClassificationMethodEnd == 8
+if UseClassificationMethodStart == 7 && UseClassificationMethodEnd == 9
     figure, hold on,
     plot(GMMtest_error, '*r');
     plot(ANNtest_error, 'ob');
+    plot(SVMtest_error, '.g');
     hold off;
-    title('ANN(o) and GMM(*) classifcation error vs. dimensions');
+    title('ANN(o), GMM(*) and SVM(.) classifcation error vs. dimensions');
     xlabel('dimensions');
     ylabel('test error');
     save GMMtest_error;
     save ANNtest_error;
+    save SVMtest_error;
 end
 
 %% Printing final results
-if UseClassificationMethodStart == 0 && UseClassificationMethodEnd == 8
+if UseClassificationMethodStart == 0 && UseClassificationMethodEnd == 10
     ANN2D_train
     ANN2D_test
     
@@ -289,4 +289,7 @@ if UseClassificationMethodStart == 0 && UseClassificationMethodEnd == 8
     
     GMM2DComp_test
     GMM3DComp_test
+    
+    SVM2D_test
+    SVM3D_test
 end

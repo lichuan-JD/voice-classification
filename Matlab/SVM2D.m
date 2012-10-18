@@ -1,7 +1,7 @@
 function [Ctrain, Ctest] = SVM2D(Ynew, Ytnew, Wnew, Wtnew)
 
-%kernel = 'rbf'; % Gaussian Radial Basis Funciton kernel
-kernel = 'quadratic'; % Quadratic kernel
+kernel = 'rbf'; % Gaussian Radial Basis Funciton kernel
+%kernel = 'quadratic'; % Quadratic kernel
 %kernel = 'polynomial'; % Polynomial kernel with order of 3
 %kernel = 'mlp'; % Multilayer Perceptron kernel with diefault scale and bias
 %kernel = 'linear'; % Linear
